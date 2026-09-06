@@ -1,6 +1,9 @@
 import cors from "cors";
 import express from "express";
 import authRoutes from "./routes/auth.routes";
+import categoryRoutes from "./routes/category.routes";
+import mealRoutes from "./routes/meal.routes";
+import providerRoutes from "./routes/provider.routes";
 
 const app = express();
 
@@ -21,5 +24,8 @@ app.get("/api/meal", (_req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/meals", mealRoutes);
+app.use("/api/providers", providerRoutes);
+app.use("/api/categories", categoryRoutes);
 
 export default app;
