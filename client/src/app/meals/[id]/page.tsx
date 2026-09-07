@@ -5,12 +5,17 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { fetchMealById } from "@/lib/meal-api";
 import { fadeUp } from "@/lib/motion";
+import { useCartStore } from "@/lib/cart-store";
 
 export default function MealDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const addItem = useCartStore((s) => s.addItem);
+  const cartItemCount = useCartStore((s) => s.items.length);
+  const [added, setAdded] = useState(false);
 
   const {data: meal, isLoading, isError} = useQuery({
     queryKey: ["meal", id],
@@ -66,11 +71,42 @@ export default function MealDetailPage() {
 
       <p className="text-sm text-muted-foreground">{meal.description}</p>
 
-      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-fit">
-        <Button disabled={!meal.isAvailable} className="w-fit">
-          Add to cart
-        </Button>
-      </motion.div>
+      <div className="flex items-center gap-3">
+        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-fit">
+          <Button
+            disabled={!meal.isAvailable}
+            className="w-fit"
+            onClick={() => {
+              addItem({
+                mealId: meal.id,
+                name: meal.name,
+                price: meal.price,
+                imageUrl: meal.imageUrl,
+                providerId: meal.provider.id,
+                providerName: meal.provider.businessName,
+              });
+              setAdded(true);
+              setTimeout(() => setAdded(false), 1500);
+            }}
+          >
+            {added ? "Added!" : "Add to cart"}
+          </Button>
+        </motion.div>
+
+        {cartItemCount > 0 && (
+          <motion.div
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-fit"
+          >
+            <Button variant="outline" nativeButton={false} render={<Link href="/cart" />}>
+              View cart ({cartItemCount})
+            </Button>
+          </motion.div>
+        )}
+      </div>
     </motion.div>
   );
 }
