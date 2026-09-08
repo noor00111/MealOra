@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -20,10 +20,12 @@ export default function SignupPage() {
   const router = useRouter();
   const setAuth = useAuthStore((s) => s.setAuth);
 
-  const {register, handleSubmit, formState: { errors },} = useForm<SignupForm>({
+  const {register, handleSubmit, control, formState: { errors },} = useForm<SignupForm>({
     resolver: zodResolver(signupSchema),
     defaultValues: { role: "CUSTOMER" },
   });
+
+  const role = useWatch({ control, name: "role" });
 
   const mutation = useMutation({
     mutationFn: registerRequest,
@@ -101,6 +103,18 @@ export default function SignupPage() {
                   </label>
                 </div>
               </div>
+
+              {role === "PROVIDER" && (
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="businessName" className="text-sm font-medium">
+                    Business name
+                  </label>
+                  <Input id="businessName" className="h-11 px-4" {...register("businessName")} />
+                  {errors.businessName && (
+                    <p className="text-sm text-destructive">{errors.businessName.message}</p>
+                  )}
+                </div>
+              )}
 
               {mutation.isError && (
                 <p className="text-sm text-destructive">{getErrorMessage(mutation.error)}</p>

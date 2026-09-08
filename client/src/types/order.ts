@@ -31,3 +31,7 @@ export type CreateOrderPayload = {
   deliveryAddress: string;
   items: { mealId: string; quantity: number }[];
 };
+
+export type ProviderOrder = Order & {
+  customer: { id: string; name: string; phone: string | null };
+};

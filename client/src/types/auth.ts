@@ -16,6 +16,7 @@ export type RegisterPayload = {
   email: string;
   password: string;
   role: Role;
+  businessName?: string;
 };
 
 export type LoginPayload = {
@@ -34,10 +35,16 @@ export const loginSchema = z.object({
 });
 export type LoginForm = z.infer<typeof loginSchema>;
 
-export const signupSchema = z.object({
-  name: z.string().min(2, "Name is too short"),
-  email: z.string().email("Enter a valid email"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  role: z.enum(["CUSTOMER", "PROVIDER"]),
-});
+export const signupSchema = z
+  .object({
+    name: z.string().min(2, "Name is too short"),
+    email: z.string().email("Enter a valid email"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    role: z.enum(["CUSTOMER", "PROVIDER"]),
+    businessName: z.string().optional(),
+  })
+  .refine((data) => data.role !== "PROVIDER" || !!data.businessName?.trim(), {
+    message: "Business name is required for providers",
+    path: ["businessName"],
+  });
 export type SignupForm = z.infer<typeof signupSchema>;

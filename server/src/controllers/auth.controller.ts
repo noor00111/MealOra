@@ -5,14 +5,20 @@ import { prisma } from "../lib/prisma";
 import { signToken } from "../lib/jwt";
 import { AuthRequest } from "../middleware/auth";
 
-const registerSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  password: z.string().min(6),
-  role: z.enum(["CUSTOMER", "PROVIDER"]).default("CUSTOMER"),
-  phone: z.string().optional(),
-  address: z.string().optional(),
-});
+const registerSchema = z
+  .object({
+    name: z.string().min(2),
+    email: z.string().email(),
+    password: z.string().min(6),
+    role: z.enum(["CUSTOMER", "PROVIDER"]).default("CUSTOMER"),
+    phone: z.string().optional(),
+    address: z.string().optional(),
+    businessName: z.string().min(2).optional(),
+  })
+  .refine((data) => data.role !== "PROVIDER" || !!data.businessName, {
+    message: "Business name is required for providers",
+    path: ["businessName"],
+  });
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -43,15 +49,27 @@ export async function register(req: AuthRequest, res: Response) {
     return res.status(400).json({ success: false, message: parsed.error.issues[0].message });
   }
 
-  const { name, email, password, role, phone, address } = parsed.data;
+  const { name, email, password, role, phone, address, businessName } = parsed.data;
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
     return res.status(409).json({ success: false, message: "Email is already registered" });
   }
   const hashed = await bcrypt.hash(password, 10);
-  const user = await prisma.user.create({
-    data: { name, email, password: hashed, role, phone, address },
+
+  const user = await prisma.$transaction(async (tx) => {
+    const created = await tx.user.create({
+      data: { name, email, password: hashed, role, phone, address },
+    });
+
+    if (role === "PROVIDER") {
+      await tx.providerProfile.create({
+        data: { userId: created.id, businessName: businessName! },
+      });
+    }
+
+    return created;
   });
+
   const token = signToken({ userId: user.id, role: user.role });
   res.status(201).json({ success: true, data: { user: toPublicUser(user), token } });
 }

@@ -9,3 +9,9 @@ export const statusStyles: Record<OrderStatus, string> = {
 };
 
 export const statusSteps: OrderStatus[] = ["PLACED", "PREPARING", "READY", "DELIVERED"];
+
+export const nextStatus: Partial<Record<OrderStatus, OrderStatus>> = {
+  PLACED: "PREPARING",
+  PREPARING: "READY",
+  READY: "DELIVERED",
+};
