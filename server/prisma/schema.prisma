@@ -13,6 +13,11 @@ enum Role {
   ADMIN
 }
 
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+}
+
 enum OrderStatus {
   PLACED
   PREPARING
@@ -27,6 +32,7 @@ model User {
   email     String     @unique
   password  String
   role      Role       @default(CUSTOMER)
+  status    UserStatus @default(ACTIVE)
   phone     String?
   address   String?
   createdAt DateTime   @default(now())

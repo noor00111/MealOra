@@ -30,6 +30,7 @@ function toPublicUser(user: {
   name: string;
   email: string;
   role: string;
+  status: string;
   phone: string | null;
   address: string | null;
 }) {
@@ -38,6 +39,7 @@ function toPublicUser(user: {
     name: user.name,
     email: user.email,
     role: user.role,
+    status: user.status,
     phone: user.phone,
     address: user.address,
   };
@@ -48,25 +50,23 @@ export async function register(req: AuthRequest, res: Response) {
   if (!parsed.success) {
     return res.status(400).json({ success: false, message: parsed.error.issues[0].message });
   }
-
   const { name, email, password, role, phone, address, businessName } = parsed.data;
+  
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
     return res.status(409).json({ success: false, message: "Email is already registered" });
   }
-  const hashed = await bcrypt.hash(password, 10);
 
+  const hashed = await bcrypt.hash(password, 10);
   const user = await prisma.$transaction(async (tx) => {
-    const created = await tx.user.create({
+  const created = await tx.user.create({
       data: { name, email, password: hashed, role, phone, address },
     });
-
     if (role === "PROVIDER") {
       await tx.providerProfile.create({
         data: { userId: created.id, businessName: businessName! },
       });
     }
-
     return created;
   });
 
@@ -89,6 +89,9 @@ export async function login(req: AuthRequest, res: Response) {
   if (!match) {
     return res.status(401).json({ success: false, message: "Invalid email or password" });
   }
+  if (user.status === "SUSPENDED") {
+    return res.status(403).json({ success: false, message: "This account has been suspended" });
+  }
   const token = signToken({ userId: user.id, role: user.role });
   res.json({ success: true, data: { user: toPublicUser(user), token } });
 }
@@ -99,6 +102,5 @@ export async function me(req: AuthRequest, res: Response) {
   if (!user) {
     return res.status(404).json({ success: false, message: "User not found" });
   }
-
   res.json({ success: true, data: { user: toPublicUser(user) } });
 }

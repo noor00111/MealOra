@@ -32,3 +32,8 @@ export async function fetchCategories() {
   const res = await api.get<{ success: true; data: Category[] }>("/categories");
   return res.data.data;
 }
+
+export async function createCategory(name: string) {
+  const res = await api.post<{ success: true; data: Category }>("/categories", { name });
+  return res.data.data;
+}

@@ -15,7 +15,7 @@ import { getErrorMessage } from "@/lib/api";
 import { useAuthStore } from "@/lib/auth-store";
 import { uploadImage } from "@/lib/cloudinary";
 import { fadeUp, staggerContainer } from "@/lib/motion";
-import { fetchCategories } from "@/lib/meal-api";
+import { createCategory, fetchCategories } from "@/lib/meal-api";
 import { createMyMeal, deleteMyMeal, fetchMyMeals, updateMyMeal } from "@/lib/provider-api";
 import { mealFormSchema, MealForm, MealFormOutput, ProviderMeal } from "@/types/provider-meal";
 
@@ -28,6 +28,8 @@ export default function ProviderMenuPage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [addingCategory, setAddingCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
 
   useEffect(() => {
     if (user && user.role !== "PROVIDER") {
@@ -53,6 +55,8 @@ export default function ProviderMenuPage() {
     defaultValues: { name: "", description: "", price: 0, categoryId: "", imageUrl: "", isAvailable: true },
   });
 
+  const categoryField = register("categoryId");
+
   const saveMutation = useMutation({
     mutationFn: (values: MealFormOutput) =>
       editing ? updateMyMeal(editing.id, values) : createMyMeal(values),
@@ -69,6 +73,16 @@ export default function ProviderMenuPage() {
     mutationFn: deleteMyMeal,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-meals"] });
+    },
+  });
+
+  const createCategoryMutation = useMutation({
+    mutationFn: createCategory,
+    onSuccess: (category) => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      setValue("categoryId", category.id);
+      setAddingCategory(false);
+      setNewCategoryName("");
     },
   });
 
@@ -156,6 +170,7 @@ export default function ProviderMenuPage() {
                   <Button variant="outline" size="sm" onClick={() => openEdit(meal)}>
                     Edit
                   </Button>
+
                   <Button
                     variant="ghost"
                     size="sm"
@@ -208,7 +223,15 @@ export default function ProviderMenuPage() {
               </label>
               <select
                 id="categoryId"
-                {...register("categoryId")}
+                {...categoryField}
+                onChange={(e) => {
+                  if (e.target.value === "__new__") {
+                    setAddingCategory(true);
+                  } else {
+                    setAddingCategory(false);
+                    categoryField.onChange(e);
+                  }
+                }}
                 className="h-8 rounded-lg border border-input bg-card px-2.5 text-sm outline-none focus-visible:border-ring">
                 <option value="">Uncategorized</option>
                 {categories?.map((c) => (
@@ -216,7 +239,42 @@ export default function ProviderMenuPage() {
                     {c.name}
                   </option>
                 ))}
+                <option value="__new__">+ Add new category</option>
               </select>
+
+              {addingCategory && (
+                <div className="flex gap-2">
+                  <Input
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    placeholder="New category name"
+                    className="flex-1"/>
+                    
+                  <Button
+                    type="button"
+                    size="sm"
+                    disabled={createCategoryMutation.isPending || !newCategoryName.trim()}
+                    onClick={() => createCategoryMutation.mutate(newCategoryName.trim())}>
+                    Add
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setAddingCategory(false);
+                      setNewCategoryName("");
+                    }}>
+                    Cancel
+                  </Button>
+                </div>
+              )}
+              {createCategoryMutation.isError && (
+                <p className="text-sm text-destructive">
+                  {getErrorMessage(createCategoryMutation.error)}
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col gap-1.5">

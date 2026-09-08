@@ -42,6 +42,23 @@ export function Navbar() {
           </>
         )}
 
+        {user?.role === "ADMIN" && (
+          <>
+            <Link href="/admin" className="text-sm text-muted-foreground hover:text-foreground">
+              Dashboard
+            </Link>
+            <Link href="/admin/users" className="text-sm text-muted-foreground hover:text-foreground">
+              Users
+            </Link>
+            <Link href="/admin/orders" className="text-sm text-muted-foreground hover:text-foreground">
+              Orders
+            </Link>
+            <Link href="/admin/categories" className="text-sm text-muted-foreground hover:text-foreground">
+              Categories
+            </Link>
+          </>
+        )}
+
         {!user && (
           <>
             <Link href="/meals" className="text-sm text-muted-foreground hover:text-foreground">
@@ -57,14 +74,10 @@ export function Navbar() {
         )}
 
         {user && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              logout();
+          <Button variant="outline" size="sm"
+            onClick={() => {logout();
               router.push("/login");
-            }}
-          >
+            }}>
             Log out
           </Button>
         )}

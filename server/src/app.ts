@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import adminRoutes from "./routes/admin.routes";
 import authRoutes from "./routes/auth.routes";
 import categoryRoutes from "./routes/category.routes";
 import mealRoutes from "./routes/meal.routes";
@@ -33,5 +34,6 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/provider/meals", providerMealRoutes);
 app.use("/api/provider/orders", providerOrderRoutes);
+app.use("/api/admin", adminRoutes);
 
 export default app;

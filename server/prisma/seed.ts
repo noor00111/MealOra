@@ -16,6 +16,19 @@ async function main() {
     )
   );
 
+  const adminPassword = await bcrypt.hash("mealoraAdmin123", 10);
+
+  await prisma.user.upsert({
+    where: { email: "admin@mealora.dev" },
+    update: {},
+    create: {
+      name: "MealOra Admin",
+      email: "admin@mealora.dev",
+      password: adminPassword,
+      role: "ADMIN",
+    },
+  });
+
   const providerPassword = await bcrypt.hash("password123", 10);
 
   const providerUser = await prisma.user.upsert({
