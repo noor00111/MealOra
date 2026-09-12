@@ -12,6 +12,7 @@ import { fetchCategories } from "@/lib/meal-api";
 import { deleteMyMeal, fetchMyMeals } from "@/lib/provider-api";
 import { ProviderMeal } from "@/types/provider-meal";
 import { MealFormDialog } from "@/components/provider/meal-form-dialog";
+import { ListRowSkeleton } from "@/components/shared/skeleton";
 
 export default function ProviderMenuPage() {
   const router = useRouter();
@@ -111,20 +112,7 @@ export default function ProviderMenuPage() {
         </motion.div>
       )}
 
-      {isLoading && (
-        <div className="rounded-2xl border border-border overflow-hidden divide-y divide-border">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-4 px-4 py-3.5">
-              <div className="size-16 rounded-xl bg-muted animate-pulse shrink-0" />
-              <div className="flex-1 space-y-1.5">
-                <div className="h-3 w-40 bg-muted animate-pulse rounded" />
-                <div className="h-2.5 w-24 bg-muted animate-pulse rounded" />
-              </div>
-              <div className="h-3 w-12 bg-muted animate-pulse rounded" />
-            </div>
-          ))}
-        </div>
-      )}
+      {isLoading && <ListRowSkeleton count={5} avatarSize="size-16" />}
 
       {!isLoading && (
         <div className="rounded-2xl border border-border overflow-hidden">

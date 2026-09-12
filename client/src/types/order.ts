@@ -35,3 +35,5 @@ export type CreateOrderPayload = {
 export type ProviderOrder = Order & {
   customer: { id: string; name: string; phone: string | null };
 };
+
+export type StatusFilter = OrderStatus | "ALL";

@@ -12,7 +12,8 @@ import { fetchProviderOrders, updateProviderOrderStatus } from "@/lib/provider-a
 import { nextStatus, statusColor } from "@/lib/order-status";
 import { timeAgo } from "@/lib/format";
 import { StatusFilterTabs } from "@/components/shared/status-filter-tabs";
-import { OrderStatus, ProviderOrder } from "@/types/order";
+import { ListRowSkeleton } from "@/components/shared/skeleton";
+import { OrderStatus, ProviderOrder, StatusFilter } from "@/types/order";
 
 const STATUS_BADGE: Record<OrderStatus, { color: string; bg: string; label: string }> = {
   PLACED:    { color: "#9a3412", bg: "#fff7ed", label: "New" },
@@ -33,8 +34,6 @@ const ACTION_COLOR: Partial<Record<OrderStatus, string>> = {
   PREPARING: "#10b981",
   READY:     "#1a4d2e",
 };
-
-type StatusFilter = OrderStatus | "ALL";
 
 const FILTER_TABS: { value: StatusFilter; label: string }[] = [
   { value: "ALL",       label: "All" },
@@ -113,18 +112,7 @@ export default function ProviderOrdersPage() {
       <StatusFilterTabs tabs={FILTER_TABS} active={statusFilter} onChange={setStatusFilter} count={tabCount} />
 
       {isLoading && (
-        <div className="rounded-2xl border border-border overflow-hidden divide-y divide-border">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-4 px-4 py-4">
-              <div className="size-10 rounded-lg bg-muted animate-pulse shrink-0" />
-              <div className="flex-1 space-y-1.5">
-                <div className="h-3 w-32 bg-muted animate-pulse rounded" />
-                <div className="h-2.5 w-48 bg-muted animate-pulse rounded" />
-              </div>
-              <div className="h-3 w-14 bg-muted animate-pulse rounded" />
-            </div>
-          ))}
-        </div>
+        <ListRowSkeleton count={4} avatarSize="size-10" avatarRadius="rounded-lg" />
       )}
 
       {!isLoading && filtered.length > 0 && (
@@ -180,8 +168,7 @@ export default function ProviderOrdersPage() {
                           onClick={() => advance(order)}
                           disabled={statusMutation.isPending}
                           className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-                          style={{ backgroundColor: ACTION_COLOR[order.status] ?? "#888" }}
-                        >
+                          style={{ backgroundColor: ACTION_COLOR[order.status] ?? "#888" }}>
                           {ACTION_LABEL[order.status]} <ArrowRight size={10} />
                         </button>
                       ) : order.status === "DELIVERED" ? (

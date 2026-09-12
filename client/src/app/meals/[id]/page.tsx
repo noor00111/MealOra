@@ -1,115 +1,141 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { ArrowLeft, ChefHat } from "lucide-react";
 import { ReviewsSection } from "@/components/shared/reviews-section";
+import { DetailPageSkeleton } from "@/components/shared/skeleton";
+import { MealImagePanel } from "@/components/meals/meal-image-panel";
+import { AddToCartBar } from "@/components/meals/add-to-cart-bar";
 import { fetchMealById } from "@/lib/meal-api";
-import { fadeUp } from "@/lib/motion";
-import { useCartStore } from "@/lib/cart-store";
 
 export default function MealDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const addItem = useCartStore((s) => s.addItem);
-  const cartItemCount = useCartStore((s) => s.items.length);
-  const [added, setAdded] = useState(false);
 
-  const {data: meal, isLoading, isError} = useQuery({
+  const { data: meal, isLoading, isError } = useQuery({
     queryKey: ["meal", id],
     queryFn: () => fetchMealById(id),
   });
 
-  if (isLoading) {
-    return <p className="p-8 text-sm text-muted-foreground">Loading meal...</p>;
-  }
+  if (isLoading) return <DetailPageSkeleton />;
 
   if (isError || !meal) {
-    return <p className="p-8 text-sm text-destructive">Meal not found.</p>;
+    return (
+      <div className="max-w-5xl mx-auto px-4 py-24 text-center">
+        <p className="text-3xl mb-3">🍽️</p>
+        <p className="font-semibold text-foreground">Meal not found</p>
+        <Link href="/meals" className="mt-4 inline-flex items-center gap-1.5 text-sm text-primary hover:underline">
+          <ArrowLeft size={13} /> Back to meals
+        </Link>
+      </div>
+    );
   }
 
+  const hasDiscount = meal.discountPercent > 0;
+  const discountedPrice = hasDiscount ? (Number(meal.price) * (1 - meal.discountPercent / 100)).toFixed(2) : null;
+
   return (
-    <motion.div
-      initial="hidden"
-      animate="show"
-      variants={fadeUp}
-      className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 p-4 md:p-8">
-      <div className="relative aspect-video w-full overflow-hidden rounded-3xl bg-muted">
-        {meal.imageUrl ? (
-          <Image src={meal.imageUrl} alt={meal.name} fill className="object-cover" />
-        ) : (
-          <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-            No image
-          </div>
-        )}
-      </div>
+    <div className="max-w-5xl mx-auto px-4 md:px-6 py-8">
 
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">{meal.name}</h1>
-          <Link
-            href={`/providers/${meal.provider.id}`}
-            className="text-sm text-primary underline-offset-4 hover:underline">
-            {meal.provider.businessName}
-          </Link>
-        </div>
-        <span className="text-xl font-semibold text-primary">${meal.price}</span>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}
+        className="mb-6">
+        <Link
+          href="/meals"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft size={15} /> All meals
+        </Link>
+      </motion.div>
 
-      <div className="flex items-center gap-2 text-xs">
-        {meal.category && (
-          <span className="rounded-full bg-accent px-2 py-0.5 text-accent-foreground">
-            {meal.category.name}
-          </span>
-        )}
-        {!meal.isAvailable && (
-          <span className="rounded-full bg-destructive/10 px-2 py-0.5 text-destructive">Unavailable</span>
-        )}
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-[420px_1fr] gap-6 md:gap-10 items-start">
+        <MealImagePanel meal={meal} />
 
-      <p className="text-sm text-muted-foreground">{meal.description}</p>
-
-      <div className="flex items-center gap-3">
-        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-fit">
-          <Button
-            disabled={!meal.isAvailable}
-            className="w-fit"
-            onClick={() => {
-              addItem({
-                mealId: meal.id,
-                name: meal.name,
-                price: meal.price,
-                imageUrl: meal.imageUrl,
-                providerId: meal.provider.id,
-                providerName: meal.provider.businessName,
-              });
-              setAdded(true);
-              setTimeout(() => setAdded(false), 1500);
-            }}
-          >
-            {added ? "Added!" : "Add to cart"}
-          </Button>
-        </motion.div>
-
-        {cartItemCount > 0 && (
+        <div className="flex flex-col gap-5 py-0 md:py-2">
           <motion.div
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-fit"
-          >
-            <Button variant="outline" nativeButton={false} render={<Link href="/cart" />}>
-              View cart ({cartItemCount})
-            </Button>
+            initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4, delay: 0.1 }}
+            className="flex items-center gap-2">
+            {meal.category && (
+              <span
+                className="text-[10px] font-black tracking-[0.18em] px-3 py-1 rounded-full"
+                style={{ backgroundColor: "rgba(74,140,63,0.1)", color: "var(--primary)" }}>
+                {meal.category.name.toUpperCase()}
+              </span>
+            )}
+            {meal.isAvailable && (
+              <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-600">
+                <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Available
+              </span>
+            )}
           </motion.div>
-        )}
-      </div>
 
-      <ReviewsSection mealId={meal.id} />
-    </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, x: 18 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.45, delay: 0.17 }}
+            className="text-3xl md:text-4xl font-bold text-foreground leading-tight"
+            style={{ fontFamily: "var(--font-playfair),Georgia,serif" }}>
+            {meal.name}
+          </motion.h1>
+
+          <motion.div
+            initial={{ opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4, delay: 0.22 }}
+            className="flex items-center gap-2 md:hidden">
+            <ChefHat size={13} className="text-primary shrink-0" />
+            <Link
+              href={`/providers/${meal.provider.id}`}
+              className="text-sm font-semibold text-primary hover:underline">
+              {meal.provider.businessName}
+            </Link>
+          </motion.div>
+
+          {meal.description && (
+            <motion.p
+              initial={{ opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4, delay: 0.27 }}
+              className="text-sm text-muted-foreground leading-relaxed">
+              {meal.description}
+            </motion.p>
+          )}
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.88 }} animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.33, type: "spring", stiffness: 300, damping: 20 }}
+            className="flex items-end gap-3">
+            <div>
+              {hasDiscount && (
+                <p className="text-sm text-muted-foreground line-through tabular-nums leading-none mb-1">
+                  ${meal.price}
+                </p>
+              )}
+              <p
+                className="text-5xl font-bold tabular-nums leading-none tracking-tight"
+                style={{ fontFamily: "var(--font-playfair),Georgia,serif", color: "var(--primary)" }}>
+                ${discountedPrice ?? meal.price}
+              </p>
+            </div>
+            {hasDiscount && (
+              <span
+                className="mb-1 text-xs font-black tracking-wide px-2.5 py-1 rounded-full text-white"
+                style={{ backgroundColor: "#ef4444" }}>
+                DEAL
+              </span>
+            )}
+          </motion.div>
+
+          <AddToCartBar meal={meal} />
+
+          <motion.div
+            initial={{ scaleX: 0, originX: 0 }} animate={{ scaleX: 1 }}
+            transition={{ delay: 0.5, duration: 0.5, ease: "easeOut" }}
+            className="h-px bg-border my-1"
+          />
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55, duration: 0.4 }}>
+            <ReviewsSection mealId={meal.id} />
+          </motion.div>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -11,11 +11,10 @@ import { useAuthStore } from "@/lib/auth-store";
 import { fetchMyOrders } from "@/lib/order-api";
 import { fadeUp, staggerContainer } from "@/lib/motion";
 import { statusColor, statusSteps } from "@/lib/order-status";
+import { StatusFilter } from "@/types/order";
 import { timeAgo } from "@/lib/format";
 import { StatusFilterTabs } from "@/components/shared/status-filter-tabs";
-import { OrderStatus } from "@/types/order";
-
-type StatusFilter = OrderStatus | "ALL";
+import { ListRowSkeleton } from "@/components/shared/skeleton";
 
 const FILTER_TABS: { value: StatusFilter; label: string }[] = [
   { value: "ALL",       label: "All" },
@@ -73,22 +72,7 @@ export default function OrdersPage() {
 
       <StatusFilterTabs tabs={FILTER_TABS} active={filter} onChange={setFilter} count={tabCount} />
 
-      {isLoading && (
-        <div className="rounded-2xl border border-border overflow-hidden divide-y divide-border">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-4 px-4 py-4">
-              <div className="flex gap-[-8px]">
-                <div className="size-11 rounded-xl bg-muted animate-pulse" />
-              </div>
-              <div className="flex-1 space-y-1.5">
-                <div className="h-3 w-36 bg-muted animate-pulse rounded" />
-                <div className="h-2.5 w-48 bg-muted animate-pulse rounded" />
-                <div className="h-2 w-40 bg-muted animate-pulse rounded mt-2" />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      {isLoading && <ListRowSkeleton count={4} lines={3} trailingValue={false} />}
 
       {!isLoading && filtered.length > 0 && (
         <div className="rounded-2xl border border-border overflow-hidden">
