@@ -1,23 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { getErrorMessage } from "@/lib/api";
+import { Plus, Pencil, Trash2 } from "lucide-react";
 import { useAuthStore } from "@/lib/auth-store";
-import { uploadImage } from "@/lib/cloudinary";
 import { fadeUp, staggerContainer } from "@/lib/motion";
-import { createCategory, fetchCategories } from "@/lib/meal-api";
-import { createMyMeal, deleteMyMeal, fetchMyMeals, updateMyMeal } from "@/lib/provider-api";
-import { mealFormSchema, MealForm, MealFormOutput, ProviderMeal } from "@/types/provider-meal";
+import { fetchCategories } from "@/lib/meal-api";
+import { deleteMyMeal, fetchMyMeals } from "@/lib/provider-api";
+import { ProviderMeal } from "@/types/provider-meal";
+import { MealFormDialog } from "@/components/provider/meal-form-dialog";
 
 export default function ProviderMenuPage() {
   const router = useRouter();
@@ -25,18 +19,11 @@ export default function ProviderMenuPage() {
   const queryClient = useQueryClient();
   const [editing, setEditing] = useState<ProviderMeal | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-  const [addingCategory, setAddingCategory] = useState(false);
-  const [newCategoryName, setNewCategoryName] = useState("");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   useEffect(() => {
-    if (user && user.role !== "PROVIDER") {
-      router.replace("/dashboard");
-    } else if (!user) {
-      router.replace("/login");
-    }
+    if (user && user.role !== "PROVIDER") router.replace("/dashboard");
+    else if (!user) router.replace("/login");
   }, [user, router]);
 
   const { data: meals, isLoading } = useQuery({
@@ -50,276 +37,202 @@ export default function ProviderMenuPage() {
     queryFn: fetchCategories,
   });
 
-  const {register, handleSubmit, reset, setValue, formState: { errors }} = useForm<MealForm, unknown, MealFormOutput>({
-    resolver: zodResolver(mealFormSchema),
-    defaultValues: { name: "", description: "", price: 0, categoryId: "", imageUrl: "", isAvailable: true },
-  });
-
-  const categoryField = register("categoryId");
-
-  const saveMutation = useMutation({
-    mutationFn: (values: MealFormOutput) =>
-      editing ? updateMyMeal(editing.id, values) : createMyMeal(values),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["my-meals"] });
-      setDialogOpen(false);
-      setEditing(null);
-      reset();
-      setImagePreview(null);
-    },
-  });
-
   const deleteMutation = useMutation({
     mutationFn: deleteMyMeal,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["my-meals"] });
-    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["my-meals"] }),
   });
-
-  const createCategoryMutation = useMutation({
-    mutationFn: createCategory,
-    onSuccess: (category) => {
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
-      setValue("categoryId", category.id);
-      setAddingCategory(false);
-      setNewCategoryName("");
-    },
-  });
-
-  async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setImagePreview(URL.createObjectURL(file));
-    setUploading(true);
-    setUploadError(null);
-
-    try {
-      const url = await uploadImage(file);
-      setValue("imageUrl", url);
-    } catch (err) {
-      setUploadError(err instanceof Error ? err.message : "Image upload failed.");
-    } finally {
-      setUploading(false);
-    }
-  }
 
   function openCreate() {
     setEditing(null);
-    reset({ name: "", description: "", price: 0, categoryId: "", imageUrl: "", isAvailable: true });
-    setImagePreview(null);
-    setUploadError(null);
     setDialogOpen(true);
   }
 
   function openEdit(meal: ProviderMeal) {
     setEditing(meal);
-    reset({
-      name: meal.name,
-      description: meal.description ?? "",
-      price: Number(meal.price),
-      categoryId: meal.categoryId ?? "",
-      imageUrl: meal.imageUrl ?? "",
-      isAvailable: meal.isAvailable,
-    });
-    setImagePreview(meal.imageUrl);
-    setUploadError(null);
     setDialogOpen(true);
   }
 
-  if (!user || user.role !== "PROVIDER") {
-    return null;
-  }
+  const filteredMeals = useMemo(
+    () => !activeCategory ? (meals ?? []) : (meals ?? []).filter(m => m.categoryId === activeCategory),
+    [meals, activeCategory]
+  );
+
+  const availableCount = (meals ?? []).filter(m => m.isAvailable).length;
+
+  if (!user || user.role !== "PROVIDER") return null;
 
   return (
-    <motion.div
-      initial="hidden"
-      animate="show"
-      variants={fadeUp}
-      className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 p-4 md:p-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-foreground">My menu</h1>
-        <Button onClick={openCreate}>Add meal</Button>
-      </div>
+    <div className="max-w-4xl mx-auto px-4 md:px-6 py-6">
 
-      {isLoading && <p className="text-sm text-muted-foreground">Loading menu...</p>}
-      {!isLoading && meals?.length === 0 && (
-        <p className="text-sm text-muted-foreground">You haven&apos;t added any meals yet.</p>
-      )}
-
-      <motion.div initial="hidden" animate="show" variants={staggerContainer} className="flex flex-col gap-3">
-        {meals?.map((meal) => (
-          <motion.div key={meal.id} variants={fadeUp}>
-            <Card className="flex-row items-center gap-4 p-3">
-              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-muted">
-                {meal.imageUrl && (
-                  <Image src={meal.imageUrl} alt={meal.name} fill className="object-cover" />
-                )}
-              </div>
-              <CardContent className="flex flex-1 items-center justify-between gap-4 px-0">
-                <div>
-                  <p className="font-medium text-foreground">{meal.name}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {meal.category?.name ?? "Uncategorized"} · ${meal.price}
-                  </p>
-                  {!meal.isAvailable && (
-                    <span className="text-xs text-destructive">Unavailable</span>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" onClick={() => openEdit(meal)}>
-                    Edit
-                  </Button>
-
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    disabled={deleteMutation.isPending}
-                    onClick={() => deleteMutation.mutate(meal.id)}>
-                    Delete
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
+      <motion.div
+        initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}
+        className="flex items-center justify-between gap-4 mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground"
+            style={{ fontFamily: "var(--font-playfair),Georgia,serif" }}>
+            My Kitchen Menu
+          </h1>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            {isLoading ? "Loading…" : `${meals?.length ?? 0} meals · ${availableCount} available`}
+          </p>
+        </div>
+        <button
+          onClick={openCreate}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-primary text-white hover:opacity-90 hover:-translate-y-px transition-all duration-200 shadow-sm shrink-0">
+          <Plus size={14} /> Add Meal
+        </button>
       </motion.div>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{editing ? "Edit meal" : "Add meal"}</DialogTitle>
-          </DialogHeader>
+      {categories && categories.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
+          className="flex items-center gap-2 flex-wrap mb-5">
+          <button
+            onClick={() => setActiveCategory(null)}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${
+              activeCategory === null
+                ? "bg-brand-green text-white border-brand-green"
+                : "bg-card text-muted-foreground border-border hover:border-brand-green/60 hover:text-brand-green"
+            }`}>
+            All
+          </button>
+          {categories.map(cat => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${
+                activeCategory === cat.id
+                  ? "bg-brand-green text-white border-brand-green"
+                  : "bg-card text-muted-foreground border-border hover:border-brand-green/60 hover:text-brand-green"
+              }`}>
+              {cat.name}
+            </button>
+          ))}
+        </motion.div>
+      )}
 
-          <form
-            className="flex flex-col gap-4"
-            onSubmit={handleSubmit((values) => saveMutation.mutate(values))}>
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="name" className="text-sm font-medium">
-                Name
-              </label>
-              <Input id="name" {...register("name")} />
-              {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+      {isLoading && (
+        <div className="rounded-2xl border border-border overflow-hidden divide-y divide-border">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-4 px-4 py-3.5">
+              <div className="size-16 rounded-xl bg-muted animate-pulse shrink-0" />
+              <div className="flex-1 space-y-1.5">
+                <div className="h-3 w-40 bg-muted animate-pulse rounded" />
+                <div className="h-2.5 w-24 bg-muted animate-pulse rounded" />
+              </div>
+              <div className="h-3 w-12 bg-muted animate-pulse rounded" />
             </div>
+          ))}
+        </div>
+      )}
 
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="description" className="text-sm font-medium">
-                Description
-              </label>
-              <Input id="description" {...register("description")} />
+      {!isLoading && (
+        <div className="rounded-2xl border border-border overflow-hidden">
+          {filteredMeals.length === 0 && meals && meals.length > 0 && (
+            <div className="py-12 text-center text-sm text-muted-foreground">
+              No meals in this category.{" "}
+              <button onClick={() => setActiveCategory(null)} className="text-primary underline">Show all</button>
             </div>
+          )}
 
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="price" className="text-sm font-medium">
-                Price
-              </label>
-              <Input id="price" type="number" step="0.01" min={0} {...register("price")} />
-              {errors.price && <p className="text-sm text-destructive">{errors.price.message}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="categoryId" className="text-sm font-medium">
-                Category
-              </label>
-              <select
-                id="categoryId"
-                {...categoryField}
-                onChange={(e) => {
-                  if (e.target.value === "__new__") {
-                    setAddingCategory(true);
-                  } else {
-                    setAddingCategory(false);
-                    categoryField.onChange(e);
-                  }
-                }}
-                className="h-8 rounded-lg border border-input bg-card px-2.5 text-sm outline-none focus-visible:border-ring">
-                <option value="">Uncategorized</option>
-                {categories?.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-                <option value="__new__">+ Add new category</option>
-              </select>
-
-              {addingCategory && (
-                <div className="flex gap-2">
-                  <Input
-                    value={newCategoryName}
-                    onChange={(e) => setNewCategoryName(e.target.value)}
-                    placeholder="New category name"
-                    className="flex-1"/>
-                    
-                  <Button
-                    type="button"
-                    size="sm"
-                    disabled={createCategoryMutation.isPending || !newCategoryName.trim()}
-                    onClick={() => createCategoryMutation.mutate(newCategoryName.trim())}>
-                    Add
-                  </Button>
-
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      setAddingCategory(false);
-                      setNewCategoryName("");
-                    }}>
-                    Cancel
-                  </Button>
-                </div>
-              )}
-              {createCategoryMutation.isError && (
-                <p className="text-sm text-destructive">
-                  {getErrorMessage(createCategoryMutation.error)}
-                </p>
-              )}
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="image" className="text-sm font-medium">
-                Image
-              </label>
-              {imagePreview && (
-                <div className="relative h-32 w-full overflow-hidden rounded-xl bg-muted">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="h-full w-full object-cover"
+          <motion.div initial="hidden" animate="show" variants={staggerContainer} className="divide-y divide-border">
+            {filteredMeals.map((meal) => (
+              <motion.div key={meal.id} variants={fadeUp}>
+                <div className="group relative flex items-center gap-4 px-4 py-3.5 hover:bg-muted/40 transition-colors duration-150">
+                  <div
+                    className="absolute left-0 top-0 bottom-0 w-[3px]"
+                    style={{ backgroundColor: meal.isAvailable ? "#10b981" : "#9ca3af" }}
                   />
+                  <div className="relative size-16 rounded-xl overflow-hidden bg-muted shrink-0">
+                    {meal.imageUrl ? (
+                      <Image
+                        src={meal.imageUrl} alt={meal.name} fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-110"
+                        sizes="56px"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-xl opacity-25 select-none">🍽</div>
+                    )}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-base text-foreground leading-snug">{meal.name}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5 truncate">
+                      {meal.description ? ` ${meal.description}` : ""}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col items-end shrink-0">
+                    {meal.discountPercent > 0 && (
+                      <span className="text-[9px] font-black tracking-wide px-1.5 py-0.5 rounded-full mb-0.5"
+                        style={{ color: "#991b1b", backgroundColor: "#fef2f2" }}>
+                        -{meal.discountPercent}%
+                      </span>
+                    )}
+                    <span className="font-bold text-primary text-base tabular-nums">
+                      $ {meal.discountPercent > 0
+                        ? (Number(meal.price) * (1 - meal.discountPercent / 100)).toFixed(2)
+                        : meal.price}
+                    </span>
+                    {meal.discountPercent > 0 && (
+                      <span className="text-[10px] text-muted-foreground line-through tabular-nums">$ {meal.price}</span>
+                    )}
+                  </div>
+
+                  <span
+                    className="hidden sm:inline-flex shrink-0 text-[9px] font-black tracking-[0.12em] px-2 py-0.5 rounded-full"
+                    style={meal.isAvailable
+                      ? { color: "#065f46", backgroundColor: "#d1fae5" }
+                      : { color: "#374151", backgroundColor: "#f3f4f6" }
+                    }>
+                    {meal.isAvailable ? "OPEN" : "PAUSED"}
+                  </span>
+
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => openEdit(meal)}
+                      className="size-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                      aria-label="Edit">
+                      <Pencil size={13} />
+                    </button>
+                    <button
+                      onClick={() => deleteMutation.mutate(meal.id)}
+                      disabled={deleteMutation.isPending}
+                      className="size-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50"
+                      aria-label="Delete">
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
                 </div>
-              )}
-              <input type="hidden" {...register("imageUrl")} />
-              <input
-                id="image"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="text-sm text-muted-foreground file:mr-3 file:rounded-lg file:border-0 file:bg-accent file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-accent-foreground"
-              />
-              {uploading && <p className="text-sm text-muted-foreground">Uploading...</p>}
-              {uploadError && <p className="text-sm text-destructive">{uploadError}</p>}
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <button
+            onClick={openCreate}
+            className="group w-full flex items-center gap-4 px-4 py-3.5 border-t border-dashed border-border hover:bg-muted/30 transition-colors duration-150">
+            <div className="size-16 rounded-xl border-2 border-dashed border-border flex items-center justify-center text-muted-foreground group-hover:text-primary group-hover:border-primary/50 transition-colors duration-200">
+              <Plus size={16} />
             </div>
+            <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-150">
+              Add another meal
+            </span>
+          </button>
+        </div>
+      )}
 
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" {...register("isAvailable")} />
-              Available
-            </label>
+      {!isLoading && !meals?.length && (
+        <div className="mt-4 py-20 text-center rounded-2xl border-2 border-dashed border-border">
+          <p className="text-3xl mb-3">🍳</p>
+          <p className="font-semibold text-foreground mb-1">Your menu is empty</p>
+          <p className="text-sm text-muted-foreground mb-5">Add your first meal to get started.</p>
+          <button onClick={openCreate} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-primary text-white hover:opacity-90 transition-all duration-200 shadow-sm">
+            <Plus size={14} /> Add your first meal
+          </button>
+        </div>
+      )}
 
-            {saveMutation.isError && (
-              <p className="text-sm text-destructive">{getErrorMessage(saveMutation.error)}</p>
-            )}
-
-            <DialogFooter>
-              <Button type="submit" disabled={saveMutation.isPending || uploading} className="w-full">
-                {saveMutation.isPending ? "Saving..." : uploading ? "Uploading image..." : "Save"}
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
-    </motion.div>
+      <MealFormDialog open={dialogOpen} onOpenChange={setDialogOpen} editing={editing} />
+    </div>
   );
 }

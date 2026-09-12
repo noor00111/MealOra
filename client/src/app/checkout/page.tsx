@@ -59,7 +59,7 @@ export default function CheckoutPage() {
       <div className="flex flex-1 flex-col items-center justify-center gap-4 p-8 text-center">
         <p className="text-muted-foreground">Your cart is empty.</p>
         <Button nativeButton={false} render={<Link href="/meals" />}>
-          Browse meals
+          Find Food
         </Button>
       </div>
     );

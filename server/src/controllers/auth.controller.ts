@@ -104,3 +104,21 @@ export async function me(req: AuthRequest, res: Response) {
   }
   res.json({ success: true, data: { user: toPublicUser(user) } });
 }
+
+const updateProfileSchema = z.object({
+  name: z.string().min(2).optional(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+});
+
+export async function updateProfile(req: AuthRequest, res: Response) {
+  const parsed = updateProfileSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ success: false, message: parsed.error.issues[0].message });
+  }
+  const user = await prisma.user.update({
+    where: { id: req.user!.userId },
+    data: parsed.data,
+  });
+  res.json({ success: true, data: { user: toPublicUser(user) } });
+}

@@ -40,6 +40,7 @@ model User {
 
   providerProfile ProviderProfile?
   orders          Order[]
+  reviews         Review[]
 }
 
 model ProviderProfile {
@@ -74,13 +75,15 @@ model Meal {
   description String?
   price       Decimal  @db.Decimal(10, 2)
   imageUrl    String?
-  isAvailable Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isAvailable     Boolean  @default(true)
+  discountPercent Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   provider   ProviderProfile @relation(fields: [providerId], references: [id], onDelete: Cascade)
   category   Category?       @relation(fields: [categoryId], references: [id])
   orderItems OrderItem[]
+  reviews    Review[]
 }
 
 model Order {
@@ -105,4 +108,18 @@ model OrderItem {
 
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
   meal  Meal  @relation(fields: [mealId], references: [id])
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  customerId String
+  mealId     String
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  customer User @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  meal     Meal @relation(fields: [mealId], references: [id], onDelete: Cascade)
+
+  @@unique([customerId, mealId])
 }

@@ -20,6 +20,7 @@ export type Meal = {
   price: string;
   imageUrl: string | null;
   isAvailable: boolean;
+  discountPercent: number;
   createdAt: string;
   updatedAt: string;
   category: Category | null;
@@ -31,4 +32,5 @@ export type MealFilters = {
   minPrice?: number;
   maxPrice?: number;
   search?: string;
+  deal?: boolean;
 };

@@ -15,3 +15,11 @@ export const nextStatus: Partial<Record<OrderStatus, OrderStatus>> = {
   PREPARING: "READY",
   READY: "DELIVERED",
 };
+
+export const statusColor: Record<OrderStatus, string> = {
+  PLACED: "#f97316",
+  PREPARING: "#3b82f6",
+  READY: "#10b981",
+  DELIVERED: "#9ca3af",
+  CANCELLED: "#ef4444",
+};

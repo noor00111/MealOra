@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { loginRequest } from "@/lib/auth-api";
 import { useAuthStore } from "@/lib/auth-store";
 import { getErrorMessage } from "@/lib/api";
@@ -91,7 +92,7 @@ export default function LoginPage() {
                   <label htmlFor="password" className="text-sm font-medium">
                     Password
                   </label>
-                  <Input id="password" type="password" className="h-11 px-4" {...register("password")} />
+                  <PasswordInput id="password" className="h-11 px-4" {...register("password")} />
                   {errors.password && (
                     <p className="text-sm text-destructive">{errors.password.message}</p>
                   )}

@@ -10,6 +10,7 @@ const mealSchema = z.object({
   categoryId: z.string().optional(),
   imageUrl: z.string().optional(),
   isAvailable: z.boolean().optional(),
+  discountPercent: z.number().int().min(0).max(90).optional(),
 });
 
 async function getOwnProviderProfile(userId: string) {

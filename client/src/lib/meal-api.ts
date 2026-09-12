@@ -8,6 +8,7 @@ export async function fetchMeals(filters: MealFilters = {}) {
   if (filters.minPrice !== undefined) params.minPrice = String(filters.minPrice);
   if (filters.maxPrice !== undefined) params.maxPrice = String(filters.maxPrice);
   if (filters.search) params.search = filters.search;
+  if (filters.deal) params.deal = "true";
 
   const res = await api.get<{ success: true; data: Meal[] }>("/meals", { params });
   return res.data.data;

@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { ReviewsSection } from "@/components/shared/reviews-section";
 import { fetchMealById } from "@/lib/meal-api";
 import { fadeUp } from "@/lib/motion";
 import { useCartStore } from "@/lib/cart-store";
@@ -107,6 +108,8 @@ export default function MealDetailPage() {
           </motion.div>
         )}
       </div>
+
+      <ReviewsSection mealId={meal.id} />
     </motion.div>
   );
 }

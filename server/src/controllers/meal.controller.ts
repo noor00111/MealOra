@@ -3,11 +3,15 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "../lib/prisma";
 
 export async function getMeals(req: Request, res: Response) {
-  const { category, minPrice, maxPrice, search } = req.query;
+  const { category, minPrice, maxPrice, search, deal } = req.query;
 
   const where: Prisma.MealWhereInput = {
     isAvailable: true,
   };
+
+  if (deal === "true") {
+    where.discountPercent = { gt: 0 };
+  }
 
   if (typeof category === "string") {
     where.category = { slug: category };

@@ -10,6 +10,7 @@ export type ProviderMeal = {
   price: string;
   imageUrl: string | null;
   isAvailable: boolean;
+  discountPercent: number;
   createdAt: string;
   updatedAt: string;
   category: Category | null;
@@ -22,6 +23,7 @@ export type MealInput = {
   categoryId?: string;
   imageUrl?: string;
   isAvailable?: boolean;
+  discountPercent?: number;
 };
 
 export const mealFormSchema = z.object({
@@ -31,6 +33,7 @@ export const mealFormSchema = z.object({
   categoryId: z.string().optional(),
   imageUrl: z.string().optional(),
   isAvailable: z.boolean(),
+  discountPercent: z.coerce.number().int().min(0).max(90),
 });
 
 export type MealForm = z.input<typeof mealFormSchema>;
