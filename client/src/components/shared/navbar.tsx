@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart, Menu, X, ChefHat, UtensilsCrossed, Tag, Info } from "lucide-react";
+import { ShoppingCart, Menu, X, ChefHat, UtensilsCrossed, Tag, Info, Mail } from "lucide-react";
 import { useAuthStore } from "@/lib/auth-store";
 import { useCartStore } from "@/lib/cart-store";
 
@@ -32,6 +32,7 @@ export function Navbar() {
     { href: "/providers", label: "Our Kitchens", icon: ChefHat },
     { href: "/meals?deal=true", label: "Deals", icon: Tag },
     { href: "/about", label: "About", icon: Info },
+    { href: "/contact", label: "Contact", icon: Mail },
   ];
 
   const navLinks =

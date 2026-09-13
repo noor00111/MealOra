@@ -27,6 +27,7 @@ export default function MealsPage() {
   const [showPrice, setShowPrice] = useState(false);
 
   const filters: MealFiltersType = useMemo(() => ({
+    
       search: search || undefined,
       category: category || undefined,
       minPrice: minPrice ? Number(minPrice) : undefined,
