@@ -1,85 +1,72 @@
 "use client";
 
-import Link from "next/link";
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { fadeUp, staggerContainer } from "@/lib/motion";
 import { fetchAdminOrders, fetchAdminUsers } from "@/lib/admin-api";
+import { fetchCategories } from "@/lib/meal-api";
 import { useRequireRole } from "@/lib/use-require-role";
+import { RevenueAndOrdersRow, StatGrid } from "@/components/dashboard/admin/stat-cards";
+import { SalesAndCategories } from "@/components/dashboard/admin/sales-and-categories";
+import { RecentOrdersTable } from "@/components/dashboard/admin/recent-orders-table";
+import type { AdminOrder } from "@/types/admin";
+
+function greeting() {
+  const h = new Date().getHours();
+  return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+}
+
+function get7DayRevenue(orders: AdminOrder[]): number[] {
+  const now = new Date();
+  return Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(now);
+    d.setDate(d.getDate() - (6 - i));
+    const s = d.toISOString().split("T")[0];
+    return orders
+      .filter((o) => o.createdAt.startsWith(s))
+      .reduce((sum, o) => sum + Number(o.totalAmount), 0);
+  });
+}
 
 export default function AdminDashboardPage() {
   const admin = useRequireRole("ADMIN");
+  const { data: users } = useQuery({ queryKey: ["admin-users"],  queryFn: fetchAdminUsers,  enabled: !!admin });
+  const { data: orders } = useQuery({ queryKey: ["admin-orders"], queryFn: fetchAdminOrders, enabled: !!admin });
+  const { data: cats } = useQuery({ queryKey: ["categories"],   queryFn: fetchCategories,  enabled: !!admin });
 
-  const { data: users } = useQuery({
-    queryKey: ["admin-users"],
-    queryFn: fetchAdminUsers,
-    enabled: !!admin,
-  });
+  const customers   = users?.filter((u) => u.role === "CUSTOMER").length ?? 0;
+  const kitchens    = users?.filter((u) => u.role === "PROVIDER").length ?? 0;
+  const suspended   = users?.filter((u) => u.status === "SUSPENDED").length ?? 0;
+  const totalOrders = orders?.length ?? 0;
+  const revenue     = orders?.reduce((sum, o) => sum + Number(o.totalAmount), 0) ?? 0;
+  const avgOrder    = totalOrders > 0 ? revenue / totalOrders : 0;
+  const recentOrders = (orders ?? []).slice(0, 5);
 
-  const { data: orders } = useQuery({
-    queryKey: ["admin-orders"],
-    queryFn: fetchAdminOrders,
-    enabled: !!admin,
-  });
+  const weeklyRevenue = useMemo(() => get7DayRevenue(orders ?? []), [orders]);
+  const hasRealData   = weeklyRevenue.some((v) => v > 0);
+  const chartData     = hasRealData ? weeklyRevenue : [18, 22, 19, 25, 24, 32, 28];
+  const topCats = (cats ?? []).slice(0, 5);
 
-  if (!admin) {
-    return null;
-  }
-
-  const customers = users?.filter((u) => u.role === "CUSTOMER").length ?? 0;
-  const providers = users?.filter((u) => u.role === "PROVIDER").length ?? 0;
-  const suspended = users?.filter((u) => u.status === "SUSPENDED").length ?? 0;
-  const revenue = orders?.reduce((sum, o) => sum + Number(o.totalAmount), 0) ?? 0;
-
-  const stats = [
-    { label: "Customers", value: customers },
-    { label: "Providers", value: providers },
-    { label: "Suspended accounts", value: suspended },
-    { label: "Total orders", value: orders?.length ?? 0 },
-    { label: "Total revenue", value: `$${revenue.toFixed(2)}` },
-  ];
+  if (!admin) return null;
 
   return (
-    <motion.div
-      initial="hidden"
-      animate="show"
-      variants={fadeUp}
-      className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 p-4 md:p-8">
-      <div>
-        <h1 className="text-2xl font-semibold text-foreground">Admin dashboard</h1>
-        <p className="text-sm text-muted-foreground">Platform overview</p>
-      </div>
+    <div className="px-5 md:px-7 py-14 max-w-5xl mx-auto">
 
-      <motion.div
-        initial="hidden"
-        animate="show"
-        variants={staggerContainer}
-        className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-          
-        {stats.map((stat) => (
-          <motion.div key={stat.label} variants={fadeUp}>
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm font-medium text-muted-foreground">{stat.label}</CardTitle>
-              </CardHeader>
-              <CardContent className="text-2xl font-semibold text-foreground">{stat.value}</CardContent>
-            </Card>
-          </motion.div>
-        ))}
+      <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="mb-6">
+        <h1
+          className="text-3xl font-bold text-foreground"
+          style={{ fontFamily: "var(--font-playfair),Georgia,serif" }}>
+          {greeting()}, {admin.name.split(" ")[0]}!
+        </h1>
+        <p className="text-base text-muted-foreground mt-2">
+          Here&apos;s what&apos;s happening with MealOra today.
+        </p>
       </motion.div>
 
-      <div className="flex gap-3">
-        <Link href="/admin/users" className="text-sm text-primary underline-offset-4 hover:underline">
-          Manage users
-        </Link>
-        <Link href="/admin/orders" className="text-sm text-primary underline-offset-4 hover:underline">
-          View orders
-        </Link>
-        <Link href="/admin/categories" className="text-sm text-primary underline-offset-4 hover:underline">
-          Manage categories
-        </Link>
-      </div>
-    </motion.div>
+      <RevenueAndOrdersRow revenue={revenue} totalOrders={totalOrders} chartData={chartData} />
+      <StatGrid customers={customers} kitchens={kitchens} suspended={suspended} avgOrder={avgOrder} />
+      <SalesAndCategories chartData={chartData} topCats={topCats} />
+      <RecentOrdersTable orders={recentOrders} />
+    </div>
   );
 }

@@ -68,6 +68,9 @@ export function Navbar() {
 
   const userRoleLinks = user ? (roleLinks[user.role] ?? []) : [];
 
+  // All hooks above — safe to return early now
+  if (pathname?.startsWith("/admin")) return null;
+
   function handleLogout() {
     logout();
     router.push("/login");

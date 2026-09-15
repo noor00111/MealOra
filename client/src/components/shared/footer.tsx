@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { UtensilsCrossed, ChefHat, Tag, Info, Mail, Phone, MapPin, ArrowRight } from "lucide-react";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 const LINKS = {
   discover: [
@@ -59,8 +60,11 @@ const SOCIALS = [
 ];
 
 export function Footer() {
+  const pathname = usePathname();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+
+  if (pathname?.startsWith("/admin")) return null;
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();

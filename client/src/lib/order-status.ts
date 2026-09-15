@@ -22,4 +22,4 @@ export const statusColor: Record<OrderStatus, string> = {
   READY: "#10b981",
   DELIVERED: "#9ca3af",
   CANCELLED: "#ef4444",
-};
+}
