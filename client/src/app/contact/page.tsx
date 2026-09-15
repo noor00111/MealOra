@@ -252,7 +252,7 @@ export default function ContactPage() {
           transition={{ duration: 0.45, delay: 0.1 }}
           className="text-2xl md:text-3xl font-bold italic text-foreground"
           style={{ fontFamily: "var(--font-playfair),Georgia,serif" }}>
-          "Good food is always a good idea."
+          &ldquo;Good food is always a good idea.&rdquo;
         </motion.p>
         <motion.p
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}

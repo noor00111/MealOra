@@ -7,6 +7,33 @@ import {slideFromLeft, slideFromRight, scaleReveal, blurReveal, fadeUpDelayed, h
 export function Hero() {
   return (
     <div className="relative overflow-hidden bg-background">
+
+      <motion.div
+        initial="hidden"
+        animate="show"
+        variants={heroStagger}
+        className="md:hidden flex flex-col items-center px-4 py-10">
+        <motion.h1
+          variants={blurReveal}
+          className="text-center text-brand-green leading-[0.9] select-none"
+          style={{
+            fontFamily: "var(--font-playfair), Georgia, serif",
+            fontSize: "clamp(2.4rem, 12vw, 3.5rem)",
+            fontWeight: 600,
+            letterSpacing: "-0.01em",
+          }}>
+          MealOra
+        </motion.h1>
+
+        <motion.p
+          variants={fadeUpDelayed}
+          className="mt-4 text-center text-muted-foreground font-light tracking-[0.14em] uppercase"
+          style={{ fontSize: "0.6rem" }}>
+          Handcrafted meals&nbsp;&nbsp;·&nbsp;&nbsp;Local providers&nbsp;&nbsp;·&nbsp;&nbsp;Delivered fresh
+        </motion.p>
+      </motion.div>
+
+
       <motion.div
         initial="hidden"
         animate="show"
@@ -72,10 +99,10 @@ export function Hero() {
         initial="hidden"
         animate="show"
         variants={heroStagger}
-        className="absolute inset-0 z-10 flex flex-col items-center pointer-events-none px-4">
+        className="hidden md:flex absolute inset-0 z-10 flex-col items-center pointer-events-none px-4">
         <motion.h1
           variants={blurReveal}
-          className="mt-5 md:mt-9 text-center text-brand-green leading-[0.9] select-none"
+          className="mt-9 text-center text-brand-green leading-[0.9] select-none"
           style={{
             fontFamily: "var(--font-playfair), Georgia, serif",
             fontSize: "clamp(3.2rem, 9.5vw, 8rem)",
@@ -87,11 +114,12 @@ export function Hero() {
 
         <motion.p
           variants={fadeUpDelayed}
-          className="mt-2 md:mt-3 text-center text-muted-foreground font-light tracking-[0.18em] uppercase"
+          className="mt-3 text-center text-muted-foreground font-light tracking-[0.18em] uppercase"
           style={{ fontSize: "clamp(0.6rem, 1.2vw, 0.72rem)" }}>
           Handcrafted meals&nbsp;&nbsp;·&nbsp;&nbsp;Local providers&nbsp;&nbsp;·&nbsp;&nbsp;Delivered fresh
         </motion.p>
       </motion.div>
+
     </div>
   );
 }

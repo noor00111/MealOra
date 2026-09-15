@@ -45,6 +45,18 @@ export function MealFormDialog({open, onOpenChange, editing}: {open: boolean; on
 
   const categoryField = register("categoryId");
 
+  const [openedFor, setOpenedFor] = useState<string | null>(null);
+  const openKey = open ? editing?.id ?? "new" : null;
+  if (openKey !== openedFor) {
+    setOpenedFor(openKey);
+    if (openKey) {
+      setImagePreview(editing ? editing.imageUrl : null);
+      setUploadError(null);
+      setAddingCategory(false);
+      setNewCategoryName("");
+    }
+  }
+
   useEffect(() => {
     if (!open) return;
 
@@ -58,14 +70,9 @@ export function MealFormDialog({open, onOpenChange, editing}: {open: boolean; on
         isAvailable: editing.isAvailable,
         discountPercent: editing.discountPercent ?? 0,
       });
-      setImagePreview(editing.imageUrl);
     } else {
       reset(emptyValues);
-      setImagePreview(null);
     }
-    setUploadError(null);
-    setAddingCategory(false);
-    setNewCategoryName("");
   }, [open, editing, reset]);
 
   const saveMutation = useMutation({

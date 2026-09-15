@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
@@ -16,9 +16,16 @@ import { MealFilters as MealFiltersType } from "@/types/meal";
 const PAGE_SIZE = 9;
 
 export default function MealsPage() {
+  return (
+    <Suspense fallback={<CardGridSkeleton />}>
+      <MealsPageContent />
+    </Suspense>
+  );
+}
+
+function MealsPageContent() {
   const searchParams = useSearchParams();
   const isDealMode = searchParams.get("deal") === "true";
-
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("");
   const [minPrice, setMinPrice] = useState("");
@@ -27,7 +34,6 @@ export default function MealsPage() {
   const [showPrice, setShowPrice] = useState(false);
 
   const filters: MealFiltersType = useMemo(() => ({
-    
       search: search || undefined,
       category: category || undefined,
       minPrice: minPrice ? Number(minPrice) : undefined,
@@ -37,7 +43,10 @@ export default function MealsPage() {
     [search, category, minPrice, maxPrice, isDealMode]
   );
 
-  useEffect(() => { setPage(1); }, [search, category, minPrice, maxPrice]);
+  function updateSearch(value: string)   { setSearch(value); setPage(1); }
+  function updateCategory(value: string) { setCategory(value); setPage(1); }
+  function updateMinPrice(value: string) { setMinPrice(value); setPage(1); }
+  function updateMaxPrice(value: string) { setMaxPrice(value); setPage(1); }
 
   const { data: categories } = useQuery({
     queryKey: ["categories"],
@@ -60,6 +69,7 @@ export default function MealsPage() {
     setCategory("");
     setMinPrice("");
     setMaxPrice("");
+    setPage(1);
   }
 
   return (
@@ -102,16 +112,16 @@ export default function MealsPage() {
 
       <MealFilters
         search={search}
-        onSearchChange={setSearch}
+        onSearchChange={updateSearch}
         categories={categories}
         category={category}
-        onCategoryChange={setCategory}
+        onCategoryChange={updateCategory}
         showPrice={showPrice}
         onTogglePrice={() => setShowPrice((v) => !v)}
         minPrice={minPrice}
-        onMinPriceChange={setMinPrice}
+        onMinPriceChange={updateMinPrice}
         maxPrice={maxPrice}
-        onMaxPriceChange={setMaxPrice}
+        onMaxPriceChange={updateMaxPrice}
       />
 
       {hasActiveFilters && (

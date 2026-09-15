@@ -11,6 +11,13 @@ const SPARKS = {
   avg:       [14, 18, 15, 22, 19, 24, 21],
 };
 
+function trendFromSpark(spark: number[]) {
+  const first = spark[0] || 1;
+  const last = spark[spark.length - 1];
+  const pct = Math.max(0, ((last - first) / first) * 100);
+  return pct.toFixed(1);
+}
+
 export function RevenueAndOrdersRow({revenue, totalOrders, chartData}: {revenue: number; totalOrders: number; chartData: number[];}) {
   return (
     <motion.div
@@ -92,7 +99,7 @@ export function StatGrid({customers, kitchens, suspended, avgOrder}: {customers:
           </p>
 
           <p className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
-            <span style={{ color: s.color }}>↑ {Math.floor(Math.random() * 8) + 2}.{Math.floor(Math.random() * 9)}%</span>
+            <span style={{ color: s.color }}>↑ {trendFromSpark(s.spark)}%</span>
             {" "}this month
           </p>
         </div>

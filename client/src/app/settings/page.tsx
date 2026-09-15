@@ -42,16 +42,16 @@ export default function SettingsPage() {
     enabled: isProvider,
   });
 
-  useEffect(() => {
-    if (providerProfile) {
-      setBusinessName(providerProfile.businessName);
-      setDescription(providerProfile.description ?? "");
-      setCuisine(providerProfile.cuisine ?? "");
-      setProviderAddress(providerProfile.address ?? "");
-      setLogoUrl(providerProfile.logoUrl ?? "");
-      setLogoPreview(providerProfile.logoUrl ?? null);
-    }
-  }, [providerProfile]);
+  const [loadedProviderProfileId, setLoadedProviderProfileId] = useState<string | null>(null);
+  if (providerProfile && loadedProviderProfileId !== providerProfile.id) {
+    setLoadedProviderProfileId(providerProfile.id);
+    setBusinessName(providerProfile.businessName);
+    setDescription(providerProfile.description ?? "");
+    setCuisine(providerProfile.cuisine ?? "");
+    setProviderAddress(providerProfile.address ?? "");
+    setLogoUrl(providerProfile.logoUrl ?? "");
+    setLogoPreview(providerProfile.logoUrl ?? null);
+  }
 
   const userMutation = useMutation({
     mutationFn: () => updateUserProfile({ name: name || undefined, phone: phone || undefined, address: address || undefined }),

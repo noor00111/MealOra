@@ -237,7 +237,7 @@ export default function AboutPage() {
           <p
             className="text-3xl md:text-4xl font-bold italic leading-snug text-foreground"
             style={{ fontFamily: "var(--font-playfair),Georgia,serif" }}>
-            "Food is the ingredient that binds us together."
+            &ldquo;Food is the ingredient that binds us together.&rdquo;
           </p>
           <p className="text-sm text-muted-foreground mt-4">— The MealOra team</p>
         </motion.div>

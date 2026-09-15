@@ -41,10 +41,10 @@ export function Navbar() {
   const user      = useAuthStore((s) => s.user);
   const logout    = useAuthStore((s) => s.logout);
   const cartCount = useCartStore((s) => s.items.reduce((sum, i) => sum + i.quantity, 0));
-
-  const [scrolled,    setScrolled]    = useState(false);
-  const [mobileOpen,  setMobileOpen]  = useState(false);
-  const [dropOpen,    setDropOpen]    = useState(false);
+  
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [dropOpen, setDropOpen] = useState(false);
   const dropRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -65,10 +65,7 @@ export function Navbar() {
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href.split("?")[0]);
-
   const userRoleLinks = user ? (roleLinks[user.role] ?? []) : [];
-
-  // All hooks above — safe to return early now
   if (pathname?.startsWith("/admin")) return null;
 
   function handleLogout() {
