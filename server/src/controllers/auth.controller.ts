@@ -3,7 +3,7 @@ import { Response } from "express";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { signToken } from "../lib/jwt";
-import { AuthRequest } from "../middleware/auth";
+import { AuthRequest } from "../types/auth";
 
 const registerSchema = z
   .object({

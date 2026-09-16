@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
-import { AuthRequest } from "../middleware/auth";
+import { AuthRequest } from "../types/auth";
 
 const createOrderSchema = z.object({
   deliveryAddress: z.string().min(5, "Delivery address is required"),

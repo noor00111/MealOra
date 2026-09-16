@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { prisma } from "../lib/prisma";
-import { AuthRequest } from "../middleware/auth";
+import { AuthRequest } from "../types/auth";
 
 export async function getAllOrders(_req: AuthRequest, res: Response) {
   const orders = await prisma.order.findMany({

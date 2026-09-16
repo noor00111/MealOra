@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
-import { AuthRequest } from "../middleware/auth";
+import { AuthRequest } from "../types/auth";
 
 const statusSchema = z.object({
   status: z.enum(["ACTIVE", "SUSPENDED"]),

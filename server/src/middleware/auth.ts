@@ -1,9 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { JwtPayload, verifyToken } from "../lib/jwt";
-
-export interface AuthRequest extends Request {
-  user?: JwtPayload;
-}
+import { NextFunction, Response } from "express";
+import { verifyToken } from "../lib/jwt";
+import { AuthRequest, JwtPayload } from "../types/auth";
 
 export function requireAuth(req: AuthRequest, res: Response, next: NextFunction) {
   const header = req.headers.authorization;

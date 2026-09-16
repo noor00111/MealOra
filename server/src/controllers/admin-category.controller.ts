@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
-import { AuthRequest } from "../middleware/auth";
+import { AuthRequest } from "../types/auth";
 import { slugify } from "./category.controller";
 
 const categorySchema = z.object({

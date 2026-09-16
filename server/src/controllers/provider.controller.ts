@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
-import { AuthRequest } from "../middleware/auth";
+import { AuthRequest } from "../types/auth";
 
 const updateProviderProfileSchema = z.object({
   businessName: z.string().min(2).optional(),

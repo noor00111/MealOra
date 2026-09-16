@@ -3,6 +3,7 @@ import express from "express";
 import adminRoutes from "./routes/admin.routes";
 import authRoutes from "./routes/auth.routes";
 import categoryRoutes from "./routes/category.routes";
+import chatRoutes from "./routes/chat.routes";
 import mealRoutes from "./routes/meal.routes";
 import orderRoutes from "./routes/order.routes";
 import providerRoutes from "./routes/provider.routes";
@@ -37,5 +38,6 @@ app.use("/api/provider/meals", providerMealRoutes);
 app.use("/api/provider/orders", providerOrderRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/chat", chatRoutes);
 
 export default app;

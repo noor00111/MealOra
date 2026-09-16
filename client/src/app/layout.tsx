@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import { Navbar } from "@/components/shared/navbar";
 import { Footer } from "@/components/shared/footer";
 import { SplashScreen } from "@/components/shared/splash-screen";
+import { Chatbot } from "@/components/chatbot/chatbot";
 import { Providers } from "@/providers/providers";
 import "./globals.css";
 
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
+          <Chatbot />
         </Providers>
       </body>
     </html>
