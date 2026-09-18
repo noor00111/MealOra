@@ -2,37 +2,34 @@ import Image from "next/image";
 
 
 function RotatingBadge() {
-  const size = 148;
-  const r = 58;
+  const size = 160;
+  const r = 60;
   const cx = size / 2;
   const cy = size / 2;
   const id = "badge-circle";
   const CIRCULAR_TEXT = "FRESH MEALS · LOCAL CHEFS · ORDER NOW · ";
 
-
   return (
-    <div className="size-[148px]" style={{ animation: "spin-badge 12s linear infinite" }}>
+    <div className="size-[160px]" style={{ animation: "spin-badge 14s linear infinite" }}>
       <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size}>
         <defs>
-          <path
-            id={id}
-            d={`M ${cx},${cy} m -${r},0 a ${r},${r} 0 1,1 ${r * 2},0 a ${r},${r} 0 1,1 -${r * 2},0`}
-          />
+          <path id={id} d={`M ${cx},${cy} m -${r},0 a ${r},${r} 0 1,1 ${r * 2},0 a ${r},${r} 0 1,1 -${r * 2},0`}/>
         </defs>
-        <circle cx={cx} cy={cy} r={r + 5} fill="none" stroke="var(--brand-green)" strokeWidth="1.2" opacity="0.22" />
-        <circle cx={cx} cy={cy} r="11" fill="var(--brand-green)" />
-        
+
+        <circle cx={cx} cy={cy} r={r + 8} fill="#111c14" />
+        <circle cx={cx} cy={cy} r={r + 4} fill="none" stroke="#4ade80" strokeWidth="0.8" opacity="0.5" />
+        <circle cx={cx} cy={cy} r="9" fill="#4ade80" />
+
         <text
-          fontSize="8"
+          fontSize="8.5"
           fontWeight="700"
-          letterSpacing="1.4"
-          fill="var(--brand-green)"
+          letterSpacing="2"
+          fill="#e8f5e1"
           style={{ fontFamily: "var(--font-geist-sans)" }}>
           <textPath href={`#${id}`} startOffset="0%">
             {CIRCULAR_TEXT}
           </textPath>
         </text>
-
       </svg>
     </div>
   );
@@ -49,8 +46,8 @@ export function PromoBanner() {
               alt="Fresh seasonal specials"
               fill
               className="object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
+              sizes="(max-width: 768px) 100vw, 50vw"/>
+              
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
             <div className="absolute bottom-5 left-5">
               <p className="text-white/70 text-xs font-medium tracking-widest uppercase mb-1">Seasonal</p>

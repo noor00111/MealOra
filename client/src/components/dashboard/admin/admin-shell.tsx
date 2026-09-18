@@ -140,7 +140,7 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
                   ? "text-primary"
                   : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.05]"
               }`}
-              style={active ? { backgroundColor: "rgba(74,140,63,0.09)" } : {}}>
+              style={active ? { backgroundColor: "rgba(150,167,141,0.09)" } : {}}>
               {active && (
                 <span
                   className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full"
@@ -175,7 +175,7 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
         <div className="px-5 py-4 border-t border-border/50 flex items-center gap-3">
           <div
             className="size-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
-            style={{ backgroundColor: "rgba(74,140,63,0.12)", color: "var(--primary)" }}>
+            style={{ backgroundColor: "rgba(150,167,141,0.12)", color: "var(--primary)" }}>
             {user.name.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">

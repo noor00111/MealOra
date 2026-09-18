@@ -41,7 +41,7 @@ export function AddToCartBar({ meal }: { meal: Meal }) {
           boxShadow: meal.isAvailable
             ? added
               ? "0 4px 20px 0 rgba(22,163,74,0.4)"
-              : "0 4px 20px 0 rgba(74,140,63,0.35)"
+              : "0 4px 20px 0 rgba(150,167,141,0.35)"
             : "none",
         }}>
 

@@ -23,8 +23,7 @@ export function ScrollToTop() {
           transition={{ duration: 0.22, ease: "easeOut" }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           className="fixed bottom-6 right-6 z-50 size-11 rounded-full bg-brand-green text-white flex items-center justify-center shadow-lg hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200"
-          aria-label="Scroll to top"
-        >
+          aria-label="Scroll to top">
           <ArrowUp size={18} strokeWidth={2.2} />
         </motion.button>
       )}

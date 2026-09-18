@@ -59,7 +59,7 @@ export default function MealDetailPage() {
             {meal.category && (
               <span
                 className="text-[10px] font-black tracking-[0.18em] px-3 py-1 rounded-full"
-                style={{ backgroundColor: "rgba(74,140,63,0.1)", color: "var(--primary)" }}>
+                style={{ backgroundColor: "rgba(150,167,141,0.1)", color: "var(--primary)" }}>
                 {meal.category.name.toUpperCase()}
               </span>
             )}

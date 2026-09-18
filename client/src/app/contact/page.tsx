@@ -62,7 +62,7 @@ export default function ContactPage() {
             className="mb-4">
             <span
               className="text-[10px] font-black tracking-[0.18em] px-3 py-1.5 rounded-full"
-                style={{ backgroundColor: "rgba(74,140,63,0.1)", color: "var(--primary)" }}>
+                style={{ backgroundColor: "rgba(150,167,141,0.1)", color: "var(--primary)" }}>
               GET IN TOUCH
             </span>
           </motion.div>
@@ -204,7 +204,7 @@ export default function ContactPage() {
                     className="self-start inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-bold text-white transition-all duration-200 disabled:opacity-70"
                     style={{
                       backgroundColor: "var(--primary)",
-                      boxShadow: "0 4px 18px 0 rgba(74,140,63,0.3)",
+                      boxShadow: "0 4px 18px 0 rgba(150,167,141,0.3)",
                     }}>
                     <Send size={14} />
                     {sending ? "Sending…" : "Send Message"}
@@ -225,11 +225,11 @@ export default function ContactPage() {
                 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.22 + i * 0.08, duration: 0.38 }}
                 className="flex items-start gap-4 p-4 rounded-2xl border border-border bg-card"
-                style={{ boxShadow: "0 2px 10px 0 rgba(74,140,63,0.05)" }}>
+                style={{ boxShadow: "0 2px 10px 0 rgba(150,167,141,0.05)" }}>
                 
                 <div
                   className="size-10 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
-                  style={{ backgroundColor: "rgba(74,140,63,0.1)" }}>
+                  style={{ backgroundColor: "rgba(150,167,141,0.1)" }}>
                   <info.icon size={16} style={{ color: "var(--primary)" }} />
                 </div>
                 <div>
@@ -246,7 +246,7 @@ export default function ContactPage() {
       </div>
 
       <div className="py-14 px-4 text-center"
-        style={{ backgroundColor: "rgba(74,140,63,0.05)" }}>
+        style={{ backgroundColor: "rgba(150,167,141,0.05)" }}>
         <motion.p
           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.1 }}

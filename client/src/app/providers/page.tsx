@@ -33,7 +33,7 @@ export default function ProvidersPage() {
       {isLoading && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="rounded-2xl overflow-hidden bg-card shadow-sm" style={{ boxShadow: "0 2px 16px 0 rgba(74,140,63,0.06)" }}>
+            <div key={i} className="rounded-2xl overflow-hidden bg-card shadow-sm" style={{ boxShadow: "0 2px 16px 0 rgba(150,167,141,0.06)" }}>
               <div className="h-1.5 bg-muted animate-pulse" />
               <div className="p-5 space-y-2">
                 <div className="h-3 w-20 bg-muted animate-pulse rounded" />
@@ -58,9 +58,9 @@ export default function ProvidersPage() {
               <Link href={`/providers/${provider.id}`}>
                 <div
                   className="group rounded-2xl overflow-hidden bg-card transition-all duration-300 cursor-pointer"
-                  style={{ boxShadow: "0 2px 16px 0 rgba(74,140,63,0.06)" }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 32px 0 rgba(74,140,63,0.13)"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(-3px)"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 2px 16px 0 rgba(74,140,63,0.06)"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)"; }}>
+                  style={{ boxShadow: "0 2px 16px 0 rgba(150,167,141,0.06)" }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 32px 0 rgba(150,167,141,0.13)"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(-3px)"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 2px 16px 0 rgba(150,167,141,0.06)"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)"; }}>
                   <div className="h-[3px]" style={{ backgroundColor: "var(--primary)" }} />
 
                   <div className="px-5 pt-4 pb-3">

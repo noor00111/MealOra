@@ -63,7 +63,7 @@ export default function AdminCategoriesPage() {
       <motion.div
         initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}
         className="rounded-2xl bg-card border border-border p-5 mb-6"
-        style={{ boxShadow: "0 2px 12px 0 rgba(74,140,63,0.06)" }}>
+        style={{ boxShadow: "0 2px 12px 0 rgba(150,167,141,0.06)" }}>
         <p className="text-sm font-black tracking-[0.14em] text-muted-foreground uppercase mb-4">Add New Category</p>
         <form
           onSubmit={(e) => { e.preventDefault(); if (newName.trim()) create(); }}
@@ -114,7 +114,7 @@ export default function AdminCategoriesPage() {
               layout
               className="flex items-center gap-4 px-6 py-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all"
               style={{ boxShadow: "0 1px 6px 0 rgba(0,0,0,0.04)" }}>
-              <div className="size-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(74,140,63,0.08)" }}>
+              <div className="size-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(150,167,141,0.08)" }}>
                 <Tag size={16} style={{ color: "var(--primary)" }} />
               </div>
 

@@ -16,15 +16,15 @@ export function MealCard({ meal }: { meal: Meal }) {
       <Link href={`/meals/${meal.id}`}>
         <div
           className="group rounded-2xl overflow-hidden bg-card flex flex-col h-full transition-all duration-300"
-          style={{ boxShadow: "0 2px 12px 0 rgba(74,140,63,0.06)" }}
+          style={{ boxShadow: "0 2px 12px 0 rgba(150,167,141,0.06)" }}
           
           onMouseEnter={(e) => {
             (e.currentTarget as HTMLDivElement).style.boxShadow =
-              "0 10px 36px 0 rgba(74,140,63,0.14)";
+              "0 10px 36px 0 rgba(150,167,141,0.14)";
           }}
           onMouseLeave={(e) => {
             (e.currentTarget as HTMLDivElement).style.boxShadow =
-              "0 2px 12px 0 rgba(74,140,63,0.06)";
+              "0 2px 12px 0 rgba(150,167,141,0.06)";
           }}>
 
           <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted shrink-0">
@@ -87,7 +87,7 @@ export function MealCard({ meal }: { meal: Meal }) {
                 <span
                   className="inline-flex text-[10px] font-semibold tracking-wide px-2 py-0.5 rounded-full"
                   style={{
-                    backgroundColor: "rgba(74,140,63,0.1)",
+                    backgroundColor: "rgba(150,167,141,0.1)",
                     color: "var(--primary)",
                   }}>
                   {meal.category.name}

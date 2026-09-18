@@ -14,7 +14,7 @@ export function MealImagePanel({ meal }: { meal: Meal }) {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
         className="relative aspect-[4/3] md:aspect-[5/6] w-full overflow-hidden rounded-3xl bg-muted"
-        style={{ boxShadow: "0 8px 40px 0 rgba(74,140,63,0.14)" }}>
+        style={{ boxShadow: "0 8px 40px 0 rgba(150,167,141,0.14)" }}>
 
         {meal.imageUrl ? (
           <Image
@@ -62,7 +62,7 @@ export function MealImagePanel({ meal }: { meal: Meal }) {
         className="hidden md:flex items-center gap-2.5 mt-4 px-1">
         <div
           className="size-8 rounded-full flex items-center justify-center shrink-0"
-          style={{ backgroundColor: "rgba(74,140,63,0.1)" }}>
+          style={{ backgroundColor: "rgba(150,167,141,0.1)" }}>
           <ChefHat size={15} className="text-primary" />
         </div>
         <div className="min-w-0">

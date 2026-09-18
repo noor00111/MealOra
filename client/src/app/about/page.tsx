@@ -40,7 +40,7 @@ export default function AboutPage() {
               className="mb-4">
               <span
                 className="text-[10px] font-black tracking-[0.18em] px-3 py-1.5 rounded-full"
-                style={{ backgroundColor: "rgba(74,140,63,0.1)", color: "var(--primary)" }}>
+                style={{ backgroundColor: "rgba(150,167,141,0.1)", color: "var(--primary)" }}>
                 ABOUT MEALORA
               </span>
             </motion.div>
@@ -70,7 +70,7 @@ export default function AboutPage() {
               <Link
                 href="/meals"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold text-white transition-all duration-200 hover:opacity-90 hover:-translate-y-px"
-                style={{ backgroundColor: "var(--primary)", boxShadow: "0 4px 16px 0 rgba(74,140,63,0.3)" }}>
+                style={{ backgroundColor: "var(--primary)", boxShadow: "0 4px 16px 0 rgba(150,167,141,0.3)" }}>
                 Browse meals <ArrowRight size={14} />
               </Link>
               <Link
@@ -107,7 +107,7 @@ export default function AboutPage() {
 
             <div
               className="relative size-72 md:size-96 rounded-full overflow-hidden"
-              style={{boxShadow: "0 12px 48px 0 rgba(74,140,63,0.18), 0 0 0 6px rgba(74,140,63,0.08)"}}>
+              style={{boxShadow: "0 12px 48px 0 rgba(150,167,141,0.18), 0 0 0 6px rgba(150,167,141,0.08)"}}>
               <Image
                 src="/images/aboutImg.png"
                 alt="food"
@@ -121,7 +121,7 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55, duration: 0.4 }}
               className="absolute -bottom-4 right-0 md:-right-6 px-4 py-2.5 rounded-2xl bg-card border border-border"
-              style={{ boxShadow: "0 4px 20px 0 rgba(74,140,63,0.1)" }}>
+              style={{ boxShadow: "0 4px 20px 0 rgba(150,167,141,0.1)" }}>
               <p
                 className="text-sm font-semibold italic"
                 style={{ fontFamily: "var(--font-playfair),Georgia,serif", color: "var(--primary)" }}>
@@ -134,7 +134,7 @@ export default function AboutPage() {
 
       <div
         className="py-14"
-        style={{ backgroundColor: "rgba(74,140,63,0.04)" }}>
+        style={{ backgroundColor: "rgba(150,167,141,0.04)" }}>
         <div className="max-w-6xl mx-auto px-4 md:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             
@@ -146,7 +146,7 @@ export default function AboutPage() {
                 className="flex flex-col items-center text-center gap-3">
                 <div
                   className="size-12 rounded-2xl flex items-center justify-center"
-                  style={{ backgroundColor: "rgba(74,140,63,0.1)" }}>
+                  style={{ backgroundColor: "rgba(150,167,141,0.1)" }}>
                   <f.icon size={20} style={{ color: "var(--primary)" }} />
                 </div>
                 <p className="text-sm font-bold text-foreground">{f.title}</p>
@@ -165,7 +165,7 @@ export default function AboutPage() {
             className="relative h-80 md:h-[420px]">
             <div
               className="absolute left-0 top-0 w-[65%] h-[75%] rounded-3xl overflow-hidden"
-              style={{ boxShadow: "0 8px 32px 0 rgba(74,140,63,0.12)" }}>
+              style={{ boxShadow: "0 8px 32px 0 rgba(150,167,141,0.12)" }}>
               <Image
                 src="/images/aboutImg1.png"
                 alt="MealOra kitchen"
@@ -175,7 +175,7 @@ export default function AboutPage() {
             </div>
             <div
               className="absolute right-0 bottom-0 w-[50%] h-[55%] rounded-3xl overflow-hidden"
-              style={{ boxShadow: "0 8px 24px 0 rgba(74,140,63,0.1)" }}>
+              style={{ boxShadow: "0 8px 24px 0 rgba(150,167,141,0.1)" }}>
               <Image
                 src="/images/aboutImg2.png"
                 alt="Delicious meal"
@@ -195,7 +195,7 @@ export default function AboutPage() {
             className="flex flex-col gap-5">
             <span
               className="text-[10px] font-black tracking-[0.18em] w-fit px-3 py-1.5 rounded-full"
-              style={{ backgroundColor: "rgba(74,140,63,0.1)", color: "var(--primary)" }}>
+              style={{ backgroundColor: "rgba(150,167,141,0.1)", color: "var(--primary)" }}>
               OUR STORY
             </span>
 
@@ -229,7 +229,7 @@ export default function AboutPage() {
 
       <div
         className="py-16 px-4 text-center"
-        style={{ backgroundColor: "rgba(74,140,63,0.06)" }}>
+        style={{ backgroundColor: "rgba(150,167,141,0.06)" }}>
         <motion.div
           initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}

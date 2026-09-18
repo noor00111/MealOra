@@ -18,6 +18,7 @@ export function FeaturedDeals() {
   return (
     <div>
       <TopTicker />
+      
       <div className="relative overflow-hidden min-h-[520px] md:min-h-[580px] flex items-center">
         <Image
           src="/images/home3.png"

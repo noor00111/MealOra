@@ -3,7 +3,7 @@ import { SalesChart } from "@/components/dashboard/admin/sales-chart";
 import { Category } from "@/types/meal";
 
 const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-const CAT_COLORS = ["#f97316", "#8b5cf6", "#4a8c3f", "#eab308", "#3b82f6"];
+const CAT_COLORS = ["#f97316", "#8b5cf6", "#96a78d", "#eab308", "#3b82f6"];
 const MOCK_PERCENTS = [38, 27, 19, 11, 5];
 
 export function SalesAndCategories({chartData, topCats}: {chartData: number[]; topCats: Category[];}) {

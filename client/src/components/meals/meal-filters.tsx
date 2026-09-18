@@ -40,7 +40,7 @@ export function MealFilters({
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           className="w-full h-12 pl-10 pr-12 rounded-2xl border border-border bg-card text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary/60 transition-colors duration-200"
-          style={{ boxShadow: "0 2px 8px 0 rgba(74,140,63,0.06)" }}
+          style={{ boxShadow: "0 2px 8px 0 rgba(150,167,141,0.06)" }}
         />
 
         {search && (
@@ -101,7 +101,7 @@ export function MealFilters({
             transition={{ duration: 0.22 }}
             className="overflow-hidden mb-5">
             <div className="flex items-center gap-3 p-4 rounded-2xl border border-border bg-card"
-              style={{ boxShadow: "0 2px 8px 0 rgba(74,140,63,0.05)" }}>
+              style={{ boxShadow: "0 2px 8px 0 rgba(150,167,141,0.05)" }}>
               <span className="text-xs font-semibold text-muted-foreground shrink-0">Price range</span>
               
               <div className="flex items-center gap-2 flex-1">

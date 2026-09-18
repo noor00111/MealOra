@@ -43,9 +43,9 @@ export function RevenueAndOrdersRow({revenue, totalOrders, chartData}: {revenue:
       <Link href="/admin/orders">
         <div
           className="group rounded-2xl p-6 flex flex-col justify-between h-full cursor-pointer hover:border-primary/40 transition-all border border-border bg-card"
-          style={{ boxShadow: "0 2px 12px 0 rgba(74,140,63,0.06)" }}>
+          style={{ boxShadow: "0 2px 12px 0 rgba(150,167,141,0.06)" }}>
           <div className="flex items-center justify-between">
-            <div className="size-9 rounded-xl flex items-center justify-center" style={{ backgroundColor: "rgba(74,140,63,0.1)" }}>
+            <div className="size-9 rounded-xl flex items-center justify-center" style={{ backgroundColor: "rgba(150,167,141,0.1)" }}>
               <ShoppingBag size={16} style={{ color: "var(--primary)" }} />
             </div>
             <ArrowRight size={14} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />

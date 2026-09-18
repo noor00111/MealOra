@@ -33,7 +33,7 @@ export function ProviderDashboard({ name }: { name: string }) {
         <div className="relative z-10 px-7 py-10 md:py-14 max-w-lg">
             <h1 className="text-2xl md:text-3xl font-bold text-white"
               style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
-              {getGreeting()}, <span className="text-[#a8d5a2]">{name}!</span>
+              {getGreeting()}, <span className="text-[#b6ceb4]">{name}!</span>
             </h1>
           <p className="text-white/70 text-sm mt-2">
             Your kitchen is ready to serve delicious meals to amazing people.

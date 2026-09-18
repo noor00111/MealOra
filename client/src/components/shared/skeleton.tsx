@@ -30,7 +30,7 @@ export function CardGridSkeleton({ count = 6 }: { count?: number }) {
         <div
           key={i}
           className="rounded-2xl overflow-hidden bg-card"
-          style={{ boxShadow: "0 2px 12px 0 rgba(74,140,63,0.06)" }}>
+          style={{ boxShadow: "0 2px 12px 0 rgba(150,167,141,0.06)" }}>
           <Skeleton className="aspect-[4/3] rounded-none" />
           <div className="p-4 space-y-2">
             <Skeleton className="h-2.5 w-20" />

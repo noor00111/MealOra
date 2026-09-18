@@ -12,7 +12,7 @@ export function TopTicker() {
 const REPEATED = [...ITEMS, ...ITEMS];
 
   return (
-    <div className="w-full overflow-hidden border-b border-border/50 h-36 flex items-center mb-10">
+    <div className="w-full overflow-hidden border-b border-border/50 h-44 flex items-center mb-16">
       <div
         className="flex items-center gap-0 whitespace-nowrap w-max"
         style={{ animation: "marquee 36s linear infinite" }}>
@@ -20,7 +20,7 @@ const REPEATED = [...ITEMS, ...ITEMS];
           <span key={i} className="inline-flex items-center gap-3 px-8">
             {item.outline ? (
               <span
-                className="text-[4rem] font-bold leading-none tracking-tight select-none"
+                className="text-[6rem] font-bold leading-none tracking-tight select-none"
                 style={{
                   fontFamily: "var(--font-playfair), Georgia, serif",
                   fontStyle: "italic",

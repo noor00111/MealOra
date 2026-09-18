@@ -42,7 +42,7 @@ export function RecentOrdersTable({ orders }: { orders: AdminOrder[] }) {
               <div className="flex items-center gap-2 min-w-0">
                 <div
                   className="size-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
-                  style={{ backgroundColor: "rgba(74,140,63,0.1)", color: "var(--primary)" }}>
+                  style={{ backgroundColor: "rgba(150,167,141,0.1)", color: "var(--primary)" }}>
                   {order.customer.name.charAt(0).toUpperCase()}
                 </div>
                 <span className="text-sm font-medium text-foreground truncate">{order.customer.name}</span>

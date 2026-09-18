@@ -58,7 +58,7 @@ export function ReviewsSection({ mealId }: { mealId: string }) {
       {user?.role === "CUSTOMER" && !alreadyReviewed && (
         <div
           className="rounded-2xl p-4 border border-border bg-card"
-          style={{ boxShadow: "0 2px 8px 0 rgba(74,140,63,0.05)" }}>
+          style={{ boxShadow: "0 2px 8px 0 rgba(150,167,141,0.05)" }}>
           <p className="text-sm font-semibold text-foreground mb-3">Leave a review</p>
           <StarRating value={rating} onChange={setRating} />
           <textarea
@@ -106,12 +106,12 @@ export function ReviewsSection({ mealId }: { mealId: string }) {
           <motion.div key={review.id} variants={fadeUp}>
             <div
               className="rounded-2xl px-4 py-3.5 border border-border bg-card"
-              style={{ boxShadow: "0 1px 6px 0 rgba(74,140,63,0.04)" }}>
+              style={{ boxShadow: "0 1px 6px 0 rgba(150,167,141,0.04)" }}>
               <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-2">
                   <div
                     className="size-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
-                    style={{ backgroundColor: "rgba(74,140,63,0.1)", color: "var(--primary)" }}>
+                    style={{ backgroundColor: "rgba(150,167,141,0.1)", color: "var(--primary)" }}>
                     {review.customer.name.charAt(0).toUpperCase()}
                   </div>
                   <span className="text-sm font-semibold text-foreground">

@@ -44,7 +44,7 @@ export default function ProviderDetailPage() {
 
       <div
         className="rounded-2xl overflow-hidden bg-card mb-8 grid grid-cols-1 md:grid-cols-2 min-h-[280px]"
-        style={{ boxShadow: "0 4px 32px 0 rgba(74,140,63,0.12)" }}>
+        style={{ boxShadow: "0 4px 32px 0 rgba(150,167,141,0.12)" }}>
         <div className="relative flex flex-col justify-center px-7 py-8 md:py-10">
 
           {provider.cuisine && (
@@ -83,7 +83,7 @@ export default function ProviderDetailPage() {
             className="mt-6 flex items-center gap-2">
             <span
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold"
-              style={{ backgroundColor: "rgba(74,140,63,0.1)", color: "var(--primary)" }}>
+              style={{ backgroundColor: "rgba(150,167,141,0.1)", color: "var(--primary)" }}>
               <span className="size-1.5 rounded-full animate-pulse" style={{ backgroundColor: "var(--primary)" }} />
               Open for orders
             </span>
@@ -128,7 +128,7 @@ export default function ProviderDetailPage() {
           <p className="text-sm text-muted-foreground">No meals available yet.</p>
         </div>
       ) : (
-        <div className="rounded-2xl overflow-hidden bg-card" style={{ boxShadow: "0 2px 16px 0 rgba(74,140,63,0.06)" }}>
+        <div className="rounded-2xl overflow-hidden bg-card" style={{ boxShadow: "0 2px 16px 0 rgba(150,167,141,0.06)" }}>
           <div className="h-[3px]" style={{ backgroundColor: "var(--primary)" }} />
 
           <motion.div initial="hidden" animate="show" variants={staggerContainer} className="divide-y divide-border">

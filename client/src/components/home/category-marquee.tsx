@@ -39,8 +39,8 @@ export function CategoryMarquee() {
   const tiles = [...categories, ...categories];
 
   return (
-    <div className="mb-36 bg-background overflow-hidden">
-      <div className="mb-20 px-6 text-center">
+    <div className="mb-28 bg-background overflow-hidden">
+      <div className="mb-16 px-6 text-center">
         <p className="text-xs font-bold tracking-widest text-primary uppercase mb-2">Explore by category</p>
         <h2
           className="text-foreground leading-tight"
