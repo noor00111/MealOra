@@ -129,9 +129,8 @@ export default function ProviderDetailPage() {
         </div>
       ) : (
         <div className="rounded-2xl overflow-hidden bg-card" style={{ boxShadow: "0 2px 16px 0 rgba(150,167,141,0.06)" }}>
-          <div className="h-[3px]" style={{ backgroundColor: "var(--primary)" }} />
-
           <motion.div initial="hidden" animate="show" variants={staggerContainer} className="divide-y divide-border">
+           
             {provider.meals.map((meal) => (
               <motion.div key={meal.id} variants={fadeUp}>
                 <Link href={`/meals/${meal.id}`}>

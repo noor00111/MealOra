@@ -59,6 +59,19 @@ export function ProfilePageSkeleton({ rows = 5 }: { rows?: number }) {
   );
 }
 
+export function KitchenStripSkeleton() {
+  return (
+    <div className="flex rounded-2xl overflow-hidden bg-card">
+      <Skeleton className="w-[180px] md:w-[240px] h-[140px] md:h-[156px] shrink-0 rounded-none" />
+      <div className="flex flex-col justify-center px-5 md:px-7 py-5 flex-1 gap-2.5">
+        <Skeleton className="h-2.5 w-14" />
+        <Skeleton className="h-6 w-44" />
+        <Skeleton className="h-2 w-28" />
+      </div>
+    </div>
+  );
+}
+
 export function DetailPageSkeleton() {
   return (
     <div className="max-w-5xl mx-auto px-4 md:px-6 py-8">

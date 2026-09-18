@@ -12,9 +12,9 @@ import { useCartStore } from "@/lib/cart-store";
 const publicLinks = [
   { href: "/meals",           label: "Find Food",    icon: UtensilsCrossed },
   { href: "/providers",       label: "Our Kitchens", icon: ChefHat },
-  { href: "/meals?deal=true", label: "Deals",        icon: Tag },
   { href: "/about",           label: "About",        icon: Info },
   { href: "/contact",         label: "Contact",      icon: Mail },
+  { href: "/meals?deal=true", label: "Deals",        icon: Tag },
 ];
 
 const roleLinks: Record<string, { href: string; label: string; icon: React.ElementType }[]> = {
