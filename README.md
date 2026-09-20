@@ -1,12 +1,45 @@
+<div align="center">
+
 # MealOra 🍜
 
 > A full-stack meal delivery platform — real kitchens, real orders, and an AI that knows the menu.
 
-**Live:** [meal-ora.vercel.app](https://meal-ora.vercel.app) · API: [mealora-kv2q.onrender.com/api](https://mealora-kv2q.onrender.com/api)
+[![Live Site](https://img.shields.io/badge/Live-meal-ora-6C5CE7?style=for-the-badge&logo=vercel&logoColor=green)](https://meal-ora.vercel.app)
+
+</div>
 
 ---
 
-## What it is
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="client/public/images/HOME.png" alt="MealOra home page" width="100%" />
+      <br />
+      <sub><b>Explore MealOra</b></sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="client/public/images/ADMIN.png" alt="MealOra admin dashboard" width="100%" />
+      <br />
+      <sub><b>Admin Dashboard</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="client/public/images/REG.png" alt="MealOra sign up page" width="100%" />
+      <br />
+      <sub><b>Sign Up</b></sub>
+    </td>
+        <td align="center" width="50%">
+      <img src="client/public/images/MEALS.png" alt="MealOra meals browsing page" width="100%" />
+      <br />
+      <sub><b>Browse Meals</b></sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+## What it is?
 
 MealOra connects customers with local kitchen providers. Customers browse meals, chat with an AI concierge that reads the live menu, add to cart, and place orders. Providers manage their kitchen, meals, and incoming orders through a dedicated dashboard. Admins oversee the whole platform — users, orders, and categories.
 
@@ -14,21 +47,21 @@ Three roles. One codebase. Everything talks to the same database.
 
 ---
 
-## Why it exists
+## Why it Exists?!
 
-Small and home kitchens rarely get a real storefront — they end up buried in a phone's chat history or a single Instagram post, with no menu page, no order tracking, no way for a stranger to discover them. Customers, meanwhile, default to the big delivery apps not because they prefer them, but because nothing else offers the same one-tap browse → order → track flow for local food.
+Small and home kitchens rarely get a real storefront. They end up buried in a phone's chat history or a single Instagram post, with no menu page, no order tracking, no way for a stranger to discover them. Customers, meanwhile, default to the big delivery apps not because they prefer them, but because nothing else offers the same one-tap browse → order → track flow for local food.
 
-MealOra closes that gap: providers get a proper dashboard to list meals and manage orders without needing their own website, and customers get a real ordering experience — search, filter, cart, checkout, live status — for kitchens that would otherwise have none of it.
+MealOra closes that gap: providers get a proper dashboard to list meals and manage orders without needing their own website, and customers get a real ordering experience like search, filter, cart, checkout, live status for kitchens that would otherwise have none of it.
 
-**AI Meal Concierge** — the biggest friction in ordering from an unfamiliar kitchen is not knowing what's good. Instead of scrolling a full menu, customers can just ask — "what's spicy and under $10?" — and get a real answer, because the chatbot queries the live database (meals, providers, deals) on every request and streams a response back, rather than reciting a menu someone hardcoded weeks ago.
+- **AI Meal Concierge** — ask what's good instead of scrolling the menu; answers come from the live database, not a hardcoded script.
 
-**Three-role auth pipeline** — `CUSTOMER`, `PROVIDER`, `ADMIN` — each lands on a different dashboard after login, because a home cook and a customer need entirely different tools, and mixing them into one generic UI would serve neither well. JWT-based route guards on both client and server; providers can only see their own data, admins see everything.
+- **Three-role auth pipeline** — `CUSTOMER`, `PROVIDER`, `ADMIN` each get their own dashboard, guarded on both client and server.
 
-**Order status pipeline** — the thing a delivery app can't skip is trust that the order is actually happening. Every order moves through `PLACED → PREPARING → READY → DELIVERED`, providers advance it from their dashboard, and customers watch it update live on the orders page.
+- **Order status pipeline** — `PLACED → PREPARING → READY → DELIVERED`, updated by the provider and tracked live by the customer.
 
-**Admin dashboard** — a platform connecting strangers' kitchens to strangers' orders needs oversight: revenue and order-volume stats, and the ability to see, moderate, and suspend accounts when something goes wrong.
+- **Admin dashboard** — revenue and order stats, plus the ability to moderate and suspend accounts.
 
-**Cloudinary image uploads** — food is a visual sell. Providers upload their kitchen logo and meal photos straight from the dashboard; a real photo per dish matters more here than in almost any other kind of storefront, so it needed to be effortless, not an afterthought.
+- **Cloudinary image uploads** — providers add a real kitchen logo and meal photos straight from the dashboard.
 
 ---
 
@@ -36,14 +69,14 @@ MealOra closes that gap: providers get a proper dashboard to list meals and mana
 
 | Layer | Technology |
 |---|---|
-| Frontend | Next.js (App Router) · TypeScript · Tailwind CSS v4 |
+| Frontend | Next.js · TypeScript · Tailwind CSS |
 | Animation | Framer Motion |
-| State | TanStack React Query · Zustand (auth, cart) |
+| State | TanStack React Query · Zustand |
 | Forms | React Hook Form · Zod |
 | Backend | Express.js · TypeScript |
 | Database | PostgreSQL (Neon) · Prisma ORM |
 | Auth | JWT · bcryptjs |
-| AI | Google Gemini (`@google/generative-ai`) — streamed from the Express server |
+| AI | Google Gemini |
 | Images | Cloudinary |
 | Hosting | Vercel (client) · Render (server) |
 
@@ -58,7 +91,7 @@ MealOra/
 │       ├── app/                  # App Router pages
 │       │   ├── (auth)/           # Login, register
 │       │   ├── admin/            # Admin: overview, orders, users, categories
-│       │   ├── dashboard/        # Role-based dashboard (redirects admins to /admin)
+│       │   ├── dashboard/        # Role-based dashboard
 │       │   ├── meals/            # Meal browse + detail
 │       │   ├── providers/        # Public kitchen listing + detail
 │       │   ├── provider/         # Provider's own menu + orders dashboard
@@ -142,8 +175,6 @@ NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET="your-preset"
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
-
 ---
 
 ## Getting a Gemini API key
@@ -173,18 +204,13 @@ Server build command: `npm install && npx prisma generate && npm run build`, sta
 | `PROVIDER` | Manage meals, update order status, edit kitchen profile |
 | `ADMIN` | View all orders and users, suspend/activate accounts, manage categories |
 
-Register normally as `CUSTOMER`; promote to `PROVIDER` at signup by choosing that role (requires a business name), or promote a user to `ADMIN` directly in the database.
 
 ---
 
 ## Key design decisions
 
-- **No mock data in the AI** — the chatbot's system prompt is built from live Prisma queries against meals, providers, and categories on every request, so it always reflects the real menu.
+- **No mock data in the AI** — The chatbot's system prompt is built from live Prisma queries against meals, providers, and categories on every request, so it always reflects the real menu.
 
-- **Chat runs server-side** — the Gemini integration lives in the Express API (`server/src/controllers/chat.controller.ts`), not a Next.js API route, so it can query the database directly instead of calling back over HTTP.
+- **Chat runs server-side** — The Gemini integration lives in the Express API (`server/src/controllers/chat.controller.ts`), not a Next.js API route, so it can query the database directly instead of calling back over HTTP.
 
-- **Streaming responses** — the chat endpoint writes chunks to the response as they arrive from Gemini, so text appears progressively instead of after a long wait.
-
-- **Token-based theming** — Tailwind CSS v4 with OKLCH custom properties (`--primary`, `--card`, `--border`, etc.) rather than hardcoded values, so the whole palette can shift from one place in `globals.css`.
-
-- **Spring physics over easing** — hover and transition animations use Framer Motion springs (`stiffness`, `damping`) rather than `ease` curves, so they feel physical rather than timed.
+- **Streaming responses** — The chat endpoint writes chunks to the response as they arrive from Gemini, so text appears progressively instead of after a long wait.
