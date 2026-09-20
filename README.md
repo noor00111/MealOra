@@ -12,24 +12,24 @@
 
 <table>
   <tr>
-    <td align="center" width="50%">
+    <td align="center" valign="top" width="50%">
       <sub><b>Explore MealOra</b></sub>
       <br />
       <img src="client/public/images/HOME.png" alt="MealOra home page" width="100%" />
     </td>
-      <td align="center" width="50%">
+    <td align="center" valign="top" width="50%">
       <sub><b>Browse Meals</b></sub>
       <br />
       <img src="client/public/images/MEALS.png" alt="MealOra meals browsing page" width="100%" />
     </td>
   </tr>
   <tr>
-    <td align="center" width="50%">
+    <td align="center" valign="top" width="50%">
       <sub><b>Sign Up</b></sub>
       <br />
       <img src="client/public/images/REG.png" alt="MealOra sign up page" width="100%" />
     </td>
-      <td align="center" width="50%">
+    <td align="center" valign="top" width="50%">
       <sub><b>Admin Dashboard</b></sub>
       <br />
       <img src="client/public/images/ADMIN.png" alt="MealOra admin dashboard" width="100%" />
