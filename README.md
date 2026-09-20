@@ -4,7 +4,7 @@
 
 > A full-stack meal delivery platform — real kitchens, real orders, and an AI that knows the menu.
 
-[![Live Site](https://img.shields.io/badge/Live-meal-ora-6C5CE7?style=for-the-badge&logo=vercel&logoColor=green)](https://meal-ora.vercel.app)
+[![Live Site](https://img.shields.io/badge/Live-meal--ora-6C5CE7?style=for-the-badge&logo=vercel&logoColor=green)](https://meal-ora.vercel.app)
 
 </div>
 
@@ -13,26 +13,26 @@
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="client/public/images/HOME.png" alt="MealOra home page" width="100%" />
-      <br />
       <sub><b>Explore MealOra</b></sub>
-    </td>
-    <td align="center" width="50%">
-      <img src="client/public/images/ADMIN.png" alt="MealOra admin dashboard" width="100%" />
       <br />
-      <sub><b>Admin Dashboard</b></sub>
+      <img src="client/public/images/HOME.png" alt="MealOra home page" width="100%" />
+    </td>
+      <td align="center" width="50%">
+      <sub><b>Browse Meals</b></sub>
+      <br />
+      <img src="client/public/images/MEALS.png" alt="MealOra meals browsing page" width="100%" />
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="client/public/images/REG.png" alt="MealOra sign up page" width="100%" />
-      <br />
       <sub><b>Sign Up</b></sub>
-    </td>
-        <td align="center" width="50%">
-      <img src="client/public/images/MEALS.png" alt="MealOra meals browsing page" width="100%" />
       <br />
-      <sub><b>Browse Meals</b></sub>
+      <img src="client/public/images/REG.png" alt="MealOra sign up page" width="100%" />
+    </td>
+      <td align="center" width="50%">
+      <sub><b>Admin Dashboard</b></sub>
+      <br />
+      <img src="client/public/images/ADMIN.png" alt="MealOra admin dashboard" width="100%" />
     </td>
   </tr>
 </table>
