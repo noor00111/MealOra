@@ -8,7 +8,6 @@ import { motion } from "framer-motion";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { useAuthStore } from "@/lib/auth-store";
 import { fadeUp, staggerContainer } from "@/lib/motion";
-import { fetchCategories } from "@/lib/meal-api";
 import { deleteMyMeal, fetchMyMeals } from "@/lib/provider-api";
 import { ProviderMeal } from "@/types/provider-meal";
 import { MealFormDialog } from "@/components/provider/meal-form-dialog";
@@ -31,11 +30,6 @@ export default function ProviderMenuPage() {
     queryKey: ["my-meals"],
     queryFn: fetchMyMeals,
     enabled: user?.role === "PROVIDER",
-  });
-
-  const { data: categories } = useQuery({
-    queryKey: ["categories"],
-    queryFn: fetchCategories,
   });
 
   const deleteMutation = useMutation({
@@ -67,7 +61,7 @@ export default function ProviderMenuPage() {
 
       <motion.div
         initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}
-        className="flex items-center justify-between gap-4 mb-6">
+        className="flex items-center justify-between gap-4 mb-10">
         <div>
           <h1 className="text-2xl font-bold text-foreground"
             style={{ fontFamily: "var(--font-playfair),Georgia,serif" }}>
@@ -77,45 +71,14 @@ export default function ProviderMenuPage() {
             {isLoading ? "Loading…" : `${meals?.length ?? 0} meals · ${availableCount} available`}
           </p>
         </div>
-        <button
-          onClick={openCreate}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-primary text-white hover:opacity-90 hover:-translate-y-px transition-all duration-200 shadow-sm shrink-0">
-          <Plus size={14} /> Add Meal
-        </button>
       </motion.div>
 
-      {categories && categories.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
-          className="flex items-center gap-2 flex-wrap mb-5">
-          <button
-            onClick={() => setActiveCategory(null)}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${
-              activeCategory === null
-                ? "bg-brand-green text-white border-brand-green"
-                : "bg-card text-muted-foreground border-border hover:border-brand-green/60 hover:text-brand-green"
-            }`}>
-            All
-          </button>
-          {categories.map(cat => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${
-                activeCategory === cat.id
-                  ? "bg-brand-green text-white border-brand-green"
-                  : "bg-card text-muted-foreground border-border hover:border-brand-green/60 hover:text-brand-green"
-              }`}>
-              {cat.name}
-            </button>
-          ))}
-        </motion.div>
-      )}
 
       {isLoading && <ListRowSkeleton count={5} avatarSize="size-16" />}
 
       {!isLoading && (
         <div className="rounded-2xl border border-border overflow-hidden">
+          
           {filteredMeals.length === 0 && meals && meals.length > 0 && (
             <div className="py-12 text-center text-sm text-muted-foreground">
               No meals in this category.{" "}
@@ -127,10 +90,6 @@ export default function ProviderMenuPage() {
             {filteredMeals.map((meal) => (
               <motion.div key={meal.id} variants={fadeUp}>
                 <div className="group relative flex items-center gap-4 px-4 py-3.5 hover:bg-muted/40 transition-colors duration-150">
-                  <div
-                    className="absolute left-0 top-0 bottom-0 w-[3px]"
-                    style={{ backgroundColor: meal.isAvailable ? "#10b981" : "#9ca3af" }}
-                  />
                   <div className="relative size-16 rounded-xl overflow-hidden bg-muted shrink-0">
                     {meal.imageUrl ? (
                       <Image
@@ -144,8 +103,8 @@ export default function ProviderMenuPage() {
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-base text-foreground leading-snug">{meal.name}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5 truncate">
+                    <p className="font-semibold text-lg text-foreground leading-snug">{meal.name}</p>
+                    <p className="text-base text-muted-foreground mt-0.5 truncate">
                       {meal.description ? ` ${meal.description}` : ""}
                     </p>
                   </div>
@@ -186,7 +145,7 @@ export default function ProviderMenuPage() {
                     <button
                       onClick={() => deleteMutation.mutate(meal.id)}
                       disabled={deleteMutation.isPending}
-                      className="size-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50"
+                      className="size-8 rounded-lg flex items-center justify-center text-red-500 hover:text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50"
                       aria-label="Delete">
                       <Trash2 size={13} />
                     </button>

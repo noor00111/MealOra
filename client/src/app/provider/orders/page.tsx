@@ -82,7 +82,6 @@ export default function ProviderOrdersPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 md:px-6 py-6">
-
       <motion.div
         initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}
         className="flex items-center justify-between gap-3 mb-6">
@@ -118,6 +117,7 @@ export default function ProviderOrdersPage() {
       {!isLoading && filtered.length > 0 && (
         <div className="rounded-2xl border border-border overflow-hidden">
           <motion.div initial="hidden" animate="show" variants={staggerContainer} className="divide-y divide-border">
+            
             {filtered.map((order) => {
               const badge = STATUS_BADGE[order.status];
               const upcoming = nextStatus[order.status];
@@ -127,10 +127,7 @@ export default function ProviderOrdersPage() {
               return (
                 <motion.div key={order.id} variants={fadeUp}>
                   <div className="group relative hover:bg-muted/40 transition-colors duration-150">
-                    <div
-                      className="absolute left-0 top-0 bottom-0 w-[3px]"
-                      style={{ backgroundColor: statusColor[order.status] }}/>
-
+                    
                     <div className="flex items-center gap-3 px-4 py-3.5">
                       {firstImg && (
                         <div className="relative size-10 rounded-lg overflow-hidden bg-muted shrink-0">
@@ -142,10 +139,10 @@ export default function ProviderOrdersPage() {
                         <p className="text-[10px] font-black tracking-[0.12em] text-muted-foreground uppercase tabular-nums">
                           #{order.id.slice(-8).toUpperCase()}
                         </p>
-                        <p className="text-sm font-semibold text-foreground truncate">{order.customer.name}</p>
+                        <p className="text-base font-semibold text-foreground truncate">{order.customer.name}</p>
                       </div>
 
-                      <p className="flex-1 text-xs text-muted-foreground truncate hidden sm:block min-w-0">
+                      <p className="flex-1 text-sm text-muted-foreground truncate hidden sm:block min-w-0">
                         {itemsSummary}
                       </p>
 

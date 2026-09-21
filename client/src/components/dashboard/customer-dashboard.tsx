@@ -66,6 +66,7 @@ export function CustomerDashboard({ name }: { name: string }) {
             <div className="py-10 text-center text-muted-foreground text-sm">No orders yet — <Link href="/meals" className="text-primary underline">find something delicious!</Link></div>
           )}
         </div>
+        
         <div className="relative overflow-hidden rounded-2xl border border-border flex flex-col items-center justify-center p-6 text-center min-h-[200px]"
           style={{ background: "linear-gradient(135deg, #fff8f0 0%, #fef3e8 100%)" }}>
           <p className="text-foreground font-bold text-lg leading-tight mb-3" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>

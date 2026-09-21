@@ -85,11 +85,6 @@ export default function OrdersPage() {
                 <motion.div key={order.id} variants={fadeUp}>
                   <Link href={`/orders/${order.id}`}>
                     <div className="group relative flex items-center gap-3 px-4 py-3.5 hover:bg-muted/40 transition-colors duration-150 cursor-pointer">
-                      <div
-                        className="absolute left-0 top-0 bottom-0 w-[3px]"
-                        style={{ backgroundColor: statusColor[order.status] }}
-                      />
-
                       <div className="flex items-center shrink-0 self-start pt-0.5">
                         {order.items.slice(0, 3).map((item, i) => (
                           <div

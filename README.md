@@ -2,7 +2,7 @@
 
 # MealOra 🍜
 
-> A full-stack meal delivery platform — real kitchens, real orders, and an AI that knows the menu.
+> A Full-stack food marketplace with — role-based dashboards, real kitchens, real orders, and an AI that knows the menu.
 
 [![Live Site](https://img.shields.io/badge/Live-meal--ora-6C5CE7?style=for-the-badge&logo=vercel&logoColor=green)](https://meal-ora.vercel.app)
 
@@ -214,3 +214,13 @@ Server build command: `npm install && npx prisma generate && npm run build`, sta
 - **Chat runs server-side** — The Gemini integration lives in the Express API (`server/src/controllers/chat.controller.ts`), not a Next.js API route, so it can query the database directly instead of calling back over HTTP.
 
 - **Streaming responses** — The chat endpoint writes chunks to the response as they arrive from Gemini, so text appears progressively instead of after a long wait.
+
+## Demo Accounts
+
+### Provider
+Email: mariorossi@gmail.com
+Password: password123
+
+### Admin
+Email: admin@mealora.dev
+Password: password123
